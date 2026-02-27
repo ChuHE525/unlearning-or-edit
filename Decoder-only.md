@@ -5,7 +5,8 @@
 * 模型通过token id进行续写,文本先被 tokenizer（分词器） 切成 token，再变成 整数 id 序列X1 X2....Xn.
 
 * Embedding（查表）：token id → 向量
-![image](https://hackmd.io/_uploads/H1lt-3iA_Wx.png)
+<img width="168" height="42" alt="屏幕截图 2026-02-27 173126" src="https://github.com/user-attachments/assets/1c084a86-616c-4e49-b8dd-e9d2d5efc0b8" />
+
  这个模型的输入不是一串数字，而是一块三维数组（张量），形状大小是BxTxd.
 1.  公式中，X是指经过查表之后的输入
 2.  R是指实数，整体表示的是一个实数数组。
