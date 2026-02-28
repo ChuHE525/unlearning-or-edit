@@ -47,17 +47,24 @@ embedding 就像给每个 token 一个“坐标”，方便做数学运算。文
 Attention
    attention 是在一个句子之中做指代关联和信息聚合。（就是在一句话中，我应该重点关注左边哪些token）
    他主要做的是：对于每一个位置的向量，Q（发问 我想找什么） K（我有什么信息可以匹配） V（ 提供内容 如果你关注我，我应该拿走什么信息） 
-   在匹配的时候，当前位置的Xt会拿自己的qt去和每个位置的Xj的kj做相似度，共公式为：
-   <img width="286" height="80" alt="屏幕截图 2026-02-28 202944" src="https://github.com/user-attachments/assets/4c11c1c9-af0f-42ca-9612-0c382cc853c3" />
-   在这个公式里，score越大，相关性越强，权重越高，减少偏差。
-   Q / K / V 从哪来？
+   Q / K / V  - **Q/K/V = 对同一个 \(h_t\) 的不同线性投影**
 - 第 t 个 token 当前向量叫 \(h_t\)（hidden state）
 - 用参数矩阵投影成：
   \[
   q_t = h_t W_Q,\quad k_t = h_t W_K,\quad v_t = h_t W_V
   \]
 - 这里 \(W_Q,W_K,W_V\) 是模型训练出来的参数。
+   在匹配的时候，当前位置的Xt会拿自己的qt去和每个位置的Xj的kj做相似度，共公式为：
+   <img width="286" height="80" alt="屏幕截图 2026-02-28 202944" src="https://github.com/user-attachments/assets/4c11c1c9-af0f-42ca-9612-0c382cc853c3" />
+   在这个公式里，score越大，相关性越强，权重越高，减少偏差。
+  Causal mask：位置 t 只能关注 ≤t 的 token，不能看未来。会加一个 因果 mask：
+  - 把未来位置的 score 设为 负无穷
+- softmax 后这些位置权重变 0
+   接下来attention做俩方面:第一步为softmax：就是把分数转化为权重 公式：
+<img width="364" height="73" alt="屏幕截图 2026-02-28 213056" src="https://github.com/user-attachments/assets/50f4bada-a764-4c02-88ab-d4a7a8860a59" />
+<img width="800" height="264" alt="屏幕截图 2026-02-28 213241" src="https://github.com/user-attachments/assets/f5fa2cea-61cd-492f-8173-caead2c4347e" />
 
-   
+​
+
 
 
