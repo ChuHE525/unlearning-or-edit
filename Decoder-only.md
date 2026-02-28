@@ -1,5 +1,4 @@
 
-# Decoder-only LLM（Day 1 笔记整理版）
 
 ## 1. Decoder-only LLM = 自回归模型（autoregressive）
 
