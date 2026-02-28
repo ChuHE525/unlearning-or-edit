@@ -14,6 +14,11 @@
 embedding 就像给每个 token 一个“坐标”，方便做数学运算。文字经过 tokenizer+embedding 变成 
 𝑋，这是神经网络可计算的输入。
 
+- 位置编码用于告诉模型 token 的顺序
+
+常见方式：token embedding + position embedding
+
+现代 LLM 常用 RoPE（作用在 Q/K，使注意力感知相对位置）
 
 * Decoder Block（重复 N 次的积木）
    整个模型需要多层 decoder block 堆叠；每层对表示做一次更新。
