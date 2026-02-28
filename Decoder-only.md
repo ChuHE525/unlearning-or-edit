@@ -2,7 +2,7 @@
 **Decoder-only LLM = 自回归模型（autoregressive）：
 当给模型一句话的时候，会不断预测下一个 token 是什么并给每一个候选一个概率，挑一个token拼上去完成续写，接着再继续预测下一个token，这个叫做生成。**
 
-* 模型通过token id进行续写,文本先被 tokenizer（分词器） 切成 token，再变成 整数 id 序列X1 X2....Xn.
+* 模型通过token id进行续写,文本先被 tokenizer（分词器） 切成 token，再变成 整数 id 序列X1 X2....XT.
 
 * Embedding（查表）：token id → 向量
 <img width="168" height="42" alt="屏幕截图 2026-02-27 173126" src="https://github.com/user-attachments/assets/1c084a86-616c-4e49-b8dd-e9d2d5efc0b8" />
