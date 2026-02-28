@@ -66,6 +66,7 @@ Attention
 对固定的t（也就是 score 矩阵第 t 行），做 softmax 得到一行权重。其中 αt,j是这一行里的第 j 个权重。对于固定的 t，模型要决定：“位置 t要把注意力分配给哪些位置 j？”所以它必须把 一行分数变成 一行权重。
 softmax的展开式：<img width="377" height="151" alt="屏幕截图 2026-02-28 213918" src="https://github.com/user-attachments/assets/e0bf3f38-b955-40f5-9c45-ac7adc3102ab" />
 <img width="856" height="164" alt="屏幕截图 2026-02-28 214057" src="https://github.com/user-attachments/assets/16abd655-b588-474f-bfcd-74337a48ef83" />
+
 要用 exp？ （e的多少次方） softmax 的性质：αt,j≥0
 
 让权重都变成 正数（注意力权重不能是负的）
@@ -79,9 +80,8 @@ softmax的展开式：<img width="377" height="151" alt="屏幕截图 2026-02-28
 对每个位置t,它会把所有位置 j 的 value 向量vj 按权重, α t,j 混合起来,得到一个新的向量ot。  （ot就是“第 t 个 token 融合了左侧上下文后的向量表示”。）
 <img width="275" height="75" alt="屏幕截图 2026-02-28 214715" src="https://github.com/user-attachments/assets/b81198a4-ac84-4439-91d5-94e96dd4614f" />
 <img width="704" height="120" alt="屏幕截图 2026-02-28 214904" src="https://github.com/user-attachments/assets/93087189-668b-4be7-92c8-c8b30a7b9ee9" />
-总结：对于每一个位置t,​​
-1. 取出这一行分数 \(S'_{t,:}\)（未来已被 mask）
-2. softmax 得到权重分布 \(\alpha_{t,:}\)（和为 1，未来权重为 0）
-3. 用权重对所有 \(v_j\) 加权求和，得到输出 \(o_t\)
+
+MLP:输入向量先经过一个线性变换 矩阵相乘（也就是乘以一个权重矩阵再加上偏置bias），然后通过一个非线性激活函数（比如 ReLU修正线性单元 砍掉所有负数、GELU高斯误差线性单元 高斯分布曲线 小的更小 大的更大 等）增加表达能力。
+Attention:跨 token 融合上下文(加权求和) MLP:逐 token 的非线性变换(提炼/组合特征) 结构: d-》dff(约4d)-》d,中间有激活(GELU/SiLU）
 
 
