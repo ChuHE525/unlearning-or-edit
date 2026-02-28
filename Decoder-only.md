@@ -49,6 +49,7 @@ Attention
    他主要做的是：对于每一个位置的向量，Q（发问 我想找什么） K（我有什么信息可以匹配） V（ 提供内容 如果你关注我，我应该拿走什么信息） 
    在匹配的时候，当前位置的Xt会拿自己的qt去和每个位置的Xj的kj做相似度，共公式为：
    <img width="286" height="80" alt="屏幕截图 2026-02-28 202944" src="https://github.com/user-attachments/assets/4c11c1c9-af0f-42ca-9612-0c382cc853c3" />
+   在这个公式里，score越大，
 
    
 
