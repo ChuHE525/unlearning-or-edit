@@ -63,8 +63,25 @@ Attention
    接下来attention做俩方面:第一步为softmax：就是把分数转化为权重 公式：
 <img width="364" height="73" alt="屏幕截图 2026-02-28 213056" src="https://github.com/user-attachments/assets/50f4bada-a764-4c02-88ab-d4a7a8860a59" />
 <img width="800" height="264" alt="屏幕截图 2026-02-28 213241" src="https://github.com/user-attachments/assets/f5fa2cea-61cd-492f-8173-caead2c4347e" />
+对固定的t（也就是 score 矩阵第 t 行），做 softmax 得到一行权重。其中 αt,j是这一行里的第 j 个权重。对于固定的 t，模型要决定：“位置 t要把注意力分配给哪些位置 j？”所以它必须把 一行分数变成 一行权重。
+softmax的展开式：<img width="377" height="151" alt="屏幕截图 2026-02-28 213918" src="https://github.com/user-attachments/assets/e0bf3f38-b955-40f5-9c45-ac7adc3102ab" />
+<img width="856" height="164" alt="屏幕截图 2026-02-28 214057" src="https://github.com/user-attachments/assets/16abd655-b588-474f-bfcd-74337a48ef83" />
+要用 exp？ （e的多少次方） softmax 的性质：αt,j≥0
 
-​
+让权重都变成 正数（注意力权重不能是负的）
 
+拉开差距：分数稍微大一点，exp 后会明显更大 → 更突出“更相关的位置”
+
+为什么要除以那个求和？
+
+为了让所有权重加起来等于 1（变成“分配比例”）。
+
+对每个位置t,它会把所有位置 j 的 value 向量vj 按权重, α t,j 混合起来,得到一个新的向量ot。  （ot就是“第 t 个 token 融合了左侧上下文后的向量表示”。）
+<img width="275" height="75" alt="屏幕截图 2026-02-28 214715" src="https://github.com/user-attachments/assets/b81198a4-ac84-4439-91d5-94e96dd4614f" />
+<img width="704" height="120" alt="屏幕截图 2026-02-28 214904" src="https://github.com/user-attachments/assets/93087189-668b-4be7-92c8-c8b30a7b9ee9" />
+总结：对于每一个位置t,​​
+1. 取出这一行分数 \(S'_{t,:}\)（未来已被 mask）
+2. softmax 得到权重分布 \(\alpha_{t,:}\)（和为 1，未来权重为 0）
+3. 用权重对所有 \(v_j\) 加权求和，得到输出 \(o_t\)
 
 
