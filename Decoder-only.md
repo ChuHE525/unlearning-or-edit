@@ -89,7 +89,7 @@ H_{new} = H_{old} + △
 
 ---
 
-## 8. 一层 decoder block 的总结（人话版）
+## 8. 一层 decoder block 的总结
 
 对每个 token：  
 先把数值调稳定（Norm），再去看左边上下文（Attention），把结果加回自己（Residual）；  
