@@ -85,3 +85,15 @@ MLP:输入向量先经过一个线性变换 矩阵相乘（也就是乘以一个
 Attention:跨 token 融合上下文(加权求和) MLP:逐 token 的非线性变换(提炼/组合特征) 结构: d-》dff(约4d)-》d,中间有激活(GELU/SiLU）
 
 
+
+### 训练（teacher forcing）
+- 有完整句子 → 一次算完所有位置（并行）
+- 靠 causal mask 防止偷看未来
+
+### 推理（生成）
+- 没有答案 → 只能一个 token 一个 token 生成（串行）
+- 常用 KV cache 加速（缓存历史 K/V）
+
+
+- **训练并行（teacher forcing），推理串行（自回归生成）。**
+
