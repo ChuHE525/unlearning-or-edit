@@ -1,6 +1,6 @@
 Transformer核心架构：
 
- 提出了一种完全基于注意力机制（Attention mechanisms）的架构，靠注意力机制（Attention mechanisms）实现序列建模性能
+ 提出了一种完全基于注意力机制（Attention mechanisms）的架构，靠注意力机制实现序列建模性能
  
   Transformer 允许显著更多的并行计算；
   
