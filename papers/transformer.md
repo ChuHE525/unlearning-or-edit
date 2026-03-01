@@ -1,18 +1,38 @@
-**提出了一种名为 Transformer 的新型网络架构，旨在解决序列转导（sequence transduction）问题，如机器翻译**
+Transformer核心架构：
 
-核心架构：
- 提出了一种完全基于注意力机制（Attention mechanisms）的架构，彻底放弃了传统的循环和卷积结构。
+ 提出了一种完全基于注意力机制（Attention mechanisms）的架构，靠注意力机制（Attention mechanisms）实现序列建模性能
  
   Transformer 允许显著更多的并行计算；
   
   在 Transformer 中，任意两个位置之间的操作步数是常数，缩短了路径长度。
+
+  模型由编码器（Encoder）和解码器（Decoder）两大部分组成。编码器将输入序列转换为连续表示，解码器则负责生成输出序列
   
-  关键技术组件：
-  self-attention：模型使用自注意力机制来计算序列的内部表示，能够关联单个序列中不同位置的信息。
+  注意力关键技术组件：
+
+自注意力（Self-Attention）：允许模型在处理一个序列时，关联序列内不同位置的信息，从而捕捉内部结构。
+
+缩放点积注意力（Scaled Dot-Product Attention）：这是计算的核心。通过引入缩放因子 ，防止在向量维度较大时点积过大导致 Softmax 函数梯度消失的问题。
+
+多头注意力（Multi-Head Attention）：这是 Transformer 的精髓。它通过多个并行运行的注意力层，让模型能够同时从不同的表示子空间关注到不同位置的信息，增强了模型的表达能力。
+
+ 支撑模型运作的关键组件:
   
-  Multi-Head Attention：允许模型同时关注来自不同表示子空间的信息。
-  
-  Scaled Dot-Product Attention：通过缩放因子防止梯度消失
-  
-  Positional Encoding：由于没有循环结构，模型通过向输入嵌入添加正弦和余弦函数来注入序列的位置信息
+位置编码（Positional Encoding）：由于模型没有循环结构，无法感知位置。作者通过加入正弦和余弦函数的位置编码来注入词汇在序列中的相对或绝对位置信息。
+
+掩码机制（Masking）：在解码器的自注意力层中，通过掩码防止模型在预测当前位置时“偷看”到未来的信息，确保自回归属性。
+
+残差连接（Residual Connections）与层归一化（Layer Normalization）：每个子层（如注意力层和前馈网络）都包装在残差连接中，随后进行层归一化，这有助于训练更深的网络
+
+训练与性能优势
+
+高度并行化：相比 RNN 的逐位顺序计算，Transformer 允许更多的并行计算，显著缩短了训练时间。
+
+长距离依赖：在 Transformer 中，任意两个位置之间的交互步数是常数 O(1)，这比 RNN（O(n)）或 CNN（O(log(n))）更容易学习序列中的长距离依赖关系。
+
+ 训练技巧
+
+学习率调度（Warmup）：模型使用 Adam 优化器，并结合了先线性增加、后按反平方根减小的学习率策略。
+
+正则化技术：使用了**丢弃法（Dropout）和标签平滑（Label Smoothing）**来防止过拟合并提高模型准确性。
   
