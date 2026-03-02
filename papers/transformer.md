@@ -46,7 +46,7 @@
   <img width="82" height="37" alt="image" src="https://github.com/user-attachments/assets/db98f55f-0745-4f3d-9b15-3b8d9802c793" />
 
 - 得点积相似度，除以  
-  <img width="69" height="44" alt="image" src="https://github.com/user-attachments/assets/64134a5a-8524-4def-9985-364efe2a0ed1" />
+<img width="63" height="63" alt="image" src="https://github.com/user-attachments/assets/af62ca02-985a-4def-9985-364efe2a0ed1" />
 
 - 缩放，经softmax得权重，再乘Value得输出。除以  
   <img width="63" height="63" alt="image" src="https://github.com/user-attachments/assets/af62ca02-985a-4def-9985-364efe2a0ed1" />
