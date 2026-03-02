@@ -1,6 +1,6 @@
 ## Transformer核心架构：
 
-- 提出了一种完全基于注意力机制（Attention mechanisms）的架构，靠注意力机制实现序列建模性能
+- Transformer 是一个完全依赖自注意力来计算其输入和输出表示的 transduction 模型
 
 ### 注意力关键技术组件：
 - 自注意力（Self-Attention）：允许模型在处理一个序列时，关联序列内不同位置的信息，从而捕捉内部结构。
