@@ -45,5 +45,5 @@ Transformer核心架构：
  缩放，经softmax得权重，再乘Value得输出。除以<img width="63" height="63" alt="image" src="https://github.com/user-attachments/assets/af62ca02-985a-4def-9985-364efe2a0ed1" />
  是因当<img width="36" height="46" alt="image" src="https://github.com/user-attachments/assets/4956568b-c8cf-4b84-ac27-fe27c761dae5" />
 大时，点积数值幅度变大，softmax梯度小训练不稳，缩放可稳定训练。 
- 
+
   
