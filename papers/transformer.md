@@ -41,6 +41,8 @@ Transformer核心架构：
     <img width="614" height="147" alt="image" src="https://github.com/user-attachments/assets/cee08dd7-dae8-4424-9860-2f10d0a8f4ed" />
 输入Query与Key - Value，先算<img width="90" height="48" alt="image" src="https://github.com/user-attachments/assets/f855b2ce-582d-473c-a6a2-b724abfb19af" />
  得点积相似度，除以<img width="69" height="44" alt="image" src="https://github.com/user-attachments/assets/64134a5a-8524-4c16-bd43-245e6a80592a" />
- 缩放，经softmax得权重，再乘Value得输出。除以$\sqrt{d_k}$ 是因当$d_k$ 大时，点积数值幅度变大，softmax梯度小训练不稳，缩放可稳定训练。 
+ 缩放，经softmax得权重，再乘Value得输出。除以<img width="63" height="63" alt="image" src="https://github.com/user-attachments/assets/af62ca02-985a-4def-9985-364efe2a0ed1" />
+ 是因当<img width="36" height="46" alt="image" src="https://github.com/user-attachments/assets/4956568b-c8cf-4b84-ac27-fe27c761dae5" />
+大时，点积数值幅度变大，softmax梯度小训练不稳，缩放可稳定训练。 
  
   
