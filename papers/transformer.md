@@ -25,7 +25,7 @@
 
 - 在 Transformer 编码器中，self - attention 是核心组件。输入经线性变换得到查询、键、值向量，通过计算注意力分数，能捕捉序列全局依赖，且可并行计算。
 
-Encoder & Decoder 结构
+### Encoder & Decoder 结构
 
 - 模型由编码器（Encoder）和解码器（Decoder）两大部分组成。编码器将输入序列转换为连续表示，解码器则负责生成输出序列，
 - transformer 总体结构为 Encoder - Decoder 加堆叠层
