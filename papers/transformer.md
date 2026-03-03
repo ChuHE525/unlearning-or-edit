@@ -69,6 +69,13 @@
 
 ### 注意力机制可描述为：将查询向量与一组键值对向量映射为输出向量，输出通过加权求和计算得到，其中查询、键、值、输出均为向量。
 ####  Scaled Dot-Product Attention  
+
+- 目的：当前位置（**Query**）应该从哪些位置（**Key/Value**）“拿信息”，每个位置拿多少。
+  - **Query（Q）**：我现在想找什么信息（“问题”）
+  - **Key（K）**：我能用什么特征被匹配（“标签/索引”）
+  - **Value（V）**：如果你关注我，你应该拿走什么内容（“内容”）
+  - 用 **Q** 和所有 **K** 算相似度 → 得到权重 → 用权重对 **V** 加权求和，得到当前位置的新表示。
+
   <img width="614" height="147" alt="image" src="https://github.com/user-attachments/assets/cee08dd7-dae8-4424-9860-2f10d0a8f4ed" />
 
 - 输入Query与Key - Value，先算  
