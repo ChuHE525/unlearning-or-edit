@@ -84,7 +84,9 @@
 - 得点积相似度，除以  
 <img width="63" height="63" alt="image" src="https://github.com/user-attachments/assets/af62ca02-985a-4def-9985-364efe2a0ed1" />
 
-- 缩放，经softmax得权重，再乘Value得输出。除以  
+- 缩放，经softmax得权重，再乘Value得输出。
+
+- 除以  
   <img width="63" height="63" alt="image" src="https://github.com/user-attachments/assets/af62ca02-985a-4def-9985-364efe2a0ed1" />
 
 - 是因当  
