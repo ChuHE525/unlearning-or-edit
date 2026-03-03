@@ -64,6 +64,7 @@ Encoder & Decoder 结构
 
  - Decoder 每层比 Encoder 多一层，Decoder 有6层，每层比Encoder多带掩码多头自注意力层，还有使它关注Encoder输出的层及FFN，各子层有残差连接和LayerNorm，自注意力层需掩码保证自回归特性(确保第 i 个位置只能依赖 i 之前的输出) 。
 
+### 注意力机制可描述为：将查询向量与一组键值对向量映射为输出向量，输出通过加权求和计算得到，其中查询、键、值、输出均为向量。
 - Attention核心公式为  
   <img width="614" height="147" alt="image" src="https://github.com/user-attachments/assets/cee08dd7-dae8-4424-9860-2f10d0a8f4ed" />
 
