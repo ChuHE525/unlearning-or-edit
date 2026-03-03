@@ -29,6 +29,7 @@ Encoder & Decoder 结构
 
 - 模型由编码器（Encoder）和解码器（Decoder）两大部分组成。编码器将输入序列转换为连续表示，解码器则负责生成输出序列，
 - transformer 总体结构为 Encoder - Decoder 加堆叠层
+
 一、Encoder（编码器）
 
 - Encoder是Transformer的编码部分，它把输入序列x编码成z。由6层堆叠而成，每层有多头自注意力子层和前馈网络子层，通过残差连接和层归一化，统一输出维度，能捕捉序列全局信息 。
