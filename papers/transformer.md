@@ -68,7 +68,7 @@ Encoder & Decoder 结构
   
 
 ### 注意力机制可描述为：将查询向量与一组键值对向量映射为输出向量，输出通过加权求和计算得到，其中查询、键、值、输出均为向量。
-- Attention核心公式为  
+####  Scaled Dot-Product Attention  
   <img width="614" height="147" alt="image" src="https://github.com/user-attachments/assets/cee08dd7-dae8-4424-9860-2f10d0a8f4ed" />
 
 - 输入Query与Key - Value，先算  
