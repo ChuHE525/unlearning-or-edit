@@ -74,6 +74,7 @@
   - **Query（Q）**：我现在想找什么信息（“问题”）
   - **Key（K）**：我能用什么特征被匹配（“标签/索引”）
   - **Value（V）**：如果你关注我，你应该拿走什么内容（“内容”）
+  - **dk** :描述q和k向量有多少元素（维度）
   - 用 **Q** 和所有 **K** 算相似度 → 得到权重 → 用权重对 **V** 加权求和，得到当前位置的新表示。
 
   <img width="614" height="147" alt="image" src="https://github.com/user-attachments/assets/cee08dd7-dae8-4424-9860-2f10d0a8f4ed" />
