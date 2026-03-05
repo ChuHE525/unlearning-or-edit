@@ -118,7 +118,7 @@
         拼接后维度：h⋅dv​
         最后 WO​ 把它变回 d_model
         ​
-### Applications of Attention in our Model
+#### Applications of Attention in our Model
 Transformer在三个位置用到multihead attention：
 
 编码器 - 解码器注意力（Encoder-Decoder Attention / Cross-Attention）
@@ -135,6 +135,19 @@ Transformer在三个位置用到multihead attention：
 实现：通过在 softmax 输入前，将对应未来位置的注意力分数设置为 -∞（即掩码），从而在训练时保持模型的自回归特性，确保生成过程是从左到右依次进行的。
 GPT 只有 decoder，masked self-attention（第三种）。​
 
+### Position-wise Feed-Forward Networks (FFN)
+
+ - 全连接前馈网络 FFN（也就是 MLP），它对每个位置（每个 token）单独做同样的非线性变换，只做token内部的加工，不做token之间的交流。
+ - FFN (x)=max (0,xW₁+b₁) W₂+b₂
+ - 令u=xW₁+b₁
+   x是指一个token的向量，长度为dmodel
+   W₁是指把它变为更长的向量，长度为dff
+   b₁是指偏置，长度和dff一样
+   括号内部的作用是把x的长度dmodel扩展到dff
+ - 令h=max (0,xW₁+b₁) 这个也可以叫做ReLU激活，目的是负数变0，正数不变。
+ - 最后回到整个公式可以看： W₂是要降低回到原来的维度dmodel，b₂和dmodel的维度一样。
+ - FFN 公式 等价于 两次 kernel size=1×1 的卷积
+   
 
 
 
