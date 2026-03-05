@@ -169,6 +169,15 @@ SOFTMAX:
 
   <img width="432" height="66" alt="image" src="https://github.com/user-attachments/assets/e3a051a0-9964-484e-81b0-83efe87b768d" />
 
+  ### Positional Encoding（位置编码）
+   - embedding 和PE是同一个维度（dmodel），可以直接相加到encoder/decoder底部输入embedding上
+     
+     <img width="407" height="62" alt="image" src="https://github.com/user-attachments/assets/2edd4bb4-7bf4-409d-b1a1-c8e5642113a4" />
+
+     <img width="500" height="304" alt="image" src="https://github.com/user-attachments/assets/3b61dffb-5a93-4ddc-9ea1-685573d90b92" />
+
+采用固定 sin/cos：偶数维 sin，奇数维 cos，不同维度不同频率（波长从 2π 到 10000⋅2π），选择 sin/cos 因为便于模型利用相对位置，并可能外推到更长序列。
+
 
 
 
