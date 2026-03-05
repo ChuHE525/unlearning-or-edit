@@ -120,6 +120,7 @@
         ​
 ### Applications of Attention in our Model
 Transformer在三个位置用到multihead attention：
+
 编码器 - 解码器注意力（Encoder-Decoder Attention / Cross-Attention）
 来源：Queries（Q）来自解码器上一层的输出，Keys（K）和 Values（V）来自编码器的最终输出（memory）。
 作用：decoder 用 Q 去问 encoder 的 K/V（从输入序列中取信息），decoder 的每个位置，都可以“看”输入序列的所有位置。
@@ -131,7 +132,8 @@ Transformer在三个位置用到multihead attention：
 解码器掩码自注意力（Decoder Masked Self-Attention）
 来源：Q、K、V 三者都来自解码器上一层的输出，必须加上mask，每个位置只能看自己和左边（≤当前位置），不能看右边未来 token
 作用：允许解码器中的每个位置只关注到它自己以及它之前的所有位置，而看不到未来的位置。
-实现：通过在 softmax 输入前，将对应未来位置的注意力分数设置为 -∞（即掩码），从而在训练时保持模型的自回归特性，确保生成过程是从左到右依次进行的。​
+实现：通过在 softmax 输入前，将对应未来位置的注意力分数设置为 -∞（即掩码），从而在训练时保持模型的自回归特性，确保生成过程是从左到右依次进行的。
+GPT 只有 decoder，masked self-attention（第三种）。​
 
 
 
