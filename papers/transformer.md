@@ -170,7 +170,7 @@ SOFTMAX:
   <img width="432" height="66" alt="image" src="https://github.com/user-attachments/assets/e3a051a0-9964-484e-81b0-83efe87b768d" />
 
   ### Positional Encoding（位置编码）
-   - embedding 和PE是同一个维度（dmodel），可以直接相加到encoder/decoder底部输入embedding上
+   - embedding 和PE是同一个维度（dmodel），可以直接相加到encoder/decoder底部输入embedding上,Xt是指这个token的完整形式，位置信息+语义信息。
      
      <img width="407" height="62" alt="image" src="https://github.com/user-attachments/assets/2edd4bb4-7bf4-409d-b1a1-c8e5642113a4" />
 
