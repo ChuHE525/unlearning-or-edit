@@ -147,7 +147,27 @@ GPT 只有 decoder，masked self-attention（第三种）。​
  - 令h=max (0,xW₁+b₁) 这个也可以叫做ReLU激活，目的是负数变0，正数不变。
  - 最后回到整个公式可以看： W₂是要降低回到原来的维度dmodel，b₂和dmodel的维度一样。
  - FFN 公式 等价于 两次 kernel size=1×1 的卷积
-   
+ ### Embeddings and Softmax  
+- Transformer 用 embedding 把 token 变成向量（维度dmodel），再用 线性层 + softmax 把 decoder 的输出变成“下一个 token 的概率”
+
+  这句话指的是，输入和输出的token都会变成向量，每一个token的长度是dmodel，（token id 是离散符号，神经网络需要连续实数向量才能计算。
+embedding 就是一张可训练的表：每个 token 对应一行向量。）
+
+Decoder 每个位置最后会输出一个隐藏向量：ht 维度为dmodel,为了预测下一个 token，需要把它映射到词表大小V,
+
+线性层：
+<img width="277" height="54" alt="image" src="https://github.com/user-attachments/assets/103c77ad-aa7f-4c7c-a332-100f97edc2d5" />
+
+其中W形状就是dmodel X V.
+
+SOFTMAX:
+<img width="418" height="62" alt="image" src="https://github.com/user-attachments/assets/f00f48cb-200f-44b4-98ab-4abf2a83a7c3" />
+目的是把logits（每个候选token的打分）变为概率。
+- Transformer 类模型中输入 Embedding、输出 Embedding 与预 Softmax 线性层权重共享
+- 在做embedding时，整体要乘一个根号下的d modle（做尺度调整，让训练更稳定）
+
+  <img width="432" height="66" alt="image" src="https://github.com/user-attachments/assets/e3a051a0-9964-484e-81b0-83efe87b768d" />
+
 
 
 
