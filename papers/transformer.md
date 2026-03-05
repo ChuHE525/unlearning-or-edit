@@ -165,6 +165,7 @@ SOFTMAX:
 目的是把logits（每个候选token的打分）变为概率。
 - Transformer 类模型中输入 Embedding、输出 Embedding 与预 Softmax 线性层权重共享
 - 在做embedding时，整体要乘一个根号下的d modle（做尺度调整，让训练更稳定）
+  这个E【Xt】是指：embedding 查表；用 token id Xt 取出 embedding 矩阵 E 的对应行，得到该 token 的 d 维向量
 
   <img width="432" height="66" alt="image" src="https://github.com/user-attachments/assets/e3a051a0-9964-484e-81b0-83efe87b768d" />
 
