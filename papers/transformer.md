@@ -174,7 +174,13 @@ SOFTMAX:
      
      <img width="407" height="62" alt="image" src="https://github.com/user-attachments/assets/2edd4bb4-7bf4-409d-b1a1-c8e5642113a4" />
 
+
+  <img width="427" height="127" alt="image" src="https://github.com/user-attachments/assets/394dfcb3-0ad9-413c-be8f-2b3b497ee8c4" />
+  
+
+
      <img width="500" height="304" alt="image" src="https://github.com/user-attachments/assets/3b61dffb-5a93-4ddc-9ea1-685573d90b92" />
+     
 
 采用固定 sin/cos：偶数维 sin，奇数维 cos，不同维度不同频率（波长从 2π 到 10000⋅2π），选择 sin/cos 因为便于模型利用相对位置，并可能外推到更长序列。
 
