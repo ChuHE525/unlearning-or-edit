@@ -1,4 +1,4 @@
-# 《A Closer Look at Machine Unlearning for Large Language Models》笔记：LLM 遗忘的评估、范式与优化
+# 《A Closer Look at Machine Unlearning for Large Language Models》LLM 遗忘的评估、范式与优化
 
 - 将任务形式化为在忘掉 forget set 的同时保留 retain set/neighbor set 与一般知识能力；在评估上除 ROUGE、Probability、Truth Ratio 外，引入 TE、CS、ES，并聚合为 MU 与 FE；在方法上将参数优化式遗忘分为 untargeted（GA、NPO）与 targeted（IDK、DPO），并结合 GD、KL 正则形成七类 baseline，从而统一讨论如何忘、如何评估、如何尽量不伤及模型效用。
   
