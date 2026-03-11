@@ -2,6 +2,42 @@
 
 - 将任务形式化为在忘掉 forget set 的同时保留 retain set/neighbor set 与一般知识能力；在评估上除 ROUGE、Probability、Truth Ratio 外，引入 TE、CS、ES，并聚合为 MU 与 FE；在方法上将参数优化式遗忘分为 untargeted（GA、NPO）与 targeted（IDK、DPO），并结合 GD、KL 正则形成七类 baseline，从而统一讨论如何忘、如何评估、如何尽量不伤及模型效用。
   
+## ME loss（Maximizing Entropy loss）
+- 给 untargeted unlearning 设计的新的forget loss——让模型在 forget set 上变得不确定,就是对forget set上每个 token 的预测都尽量接近均匀分布。
+- 公式为：
+
+  <img width="656" height="102" alt="image" src="https://github.com/user-attachments/assets/962d6094-bbcb-41f5-8158-23f5eb611194" />
+  
+  1. 𝐷𝐹：forget set
+  2. 𝜃：unlearned model 的参数
+  3. (𝑥,𝑦)∼𝐷𝐹：从 forget set 中取出一个样本；x为输入的问题；y为对应的答案
+  4. x′=x∘y：问题 x 和答案 y 拼在一起，目的是：不仅在答案部分计算 forget loss，也在问题部分计算 forget loss
+  5. 𝑇：拼接后序列 𝑥′的 token 总长度
+  6. 𝑡=1,…,𝑇：表示在这个完整序列里，逐个看第 𝑡 个 token
+  7. Pt​=p(xt′​∣x<t′​;θ)：在已经看到前面 token 𝑥<𝑡的条件下，模型对第 𝑡 个 token 的预测概率分布，这是对整个词表的概率值分布；xt′：序列中的第 𝑡 个 token，x<t′：第 𝑡 个 token 前面的所有 token，p(xt′​∣x<t′​;θ)：模型给出的 next-token 概率分布
+  8. U[k]:K 是 vocabulary size，也就是词表大小；整体表示定义在K大小词表上的均匀分布，均匀分布意味着每个token的概率都一样
+  9. 𝐾𝐿(𝑃𝑡∥𝑈[𝐾])：是 KL divergence，衡量模型当前预测分布 𝑃𝑡与均匀分布 𝑈[𝐾]的差异，如果 𝑃𝑡很接近均匀分布，KL 就小；如果𝑃𝑡很尖锐、很偏向少数 token，KL 就大，所以最小化这个 KL，就是在逼模型：不要太确定下一个 token 是什么
+  10. <img width="137" height="63" alt="image" src="https://github.com/user-attachments/assets/8f3a2c45-225a-4d2b-9eee-298629e1b3fa" />：表示对一个样本里所有 token 的 KL divergence 取平均，目的是为了不是只让某几个 token 不确定，而是希望整条 forget sample 上，模型的预测都更接近均匀分布
+  11. 𝐸(𝑥,𝑦)∼𝐷𝐹[⋅]：对 forget set 上所有样本再取期望，也就是平均
+      
+- 整个 𝐿𝑀𝐸的含义就是：在 forget set 的所有样本上，把每个 token 的预测分布都尽量推向均匀分布。
+- “最小化 KL 到均匀分布”就等价于“最大化熵”：
+  
+   公式为：<img width="483" height="60" alt="image" src="https://github.com/user-attachments/assets/04793d55-9ea9-4641-9a5d-d0d1d477a9d5" />
+
+   1. 𝐻(𝑃𝑡)是分布 𝑃𝑡的熵；
+   2. log𝐾是常数，因为词表大小 𝐾固定
+- 因此，最小化 𝐾𝐿(𝑃𝑡∥𝑈[𝐾])等价于最大化 𝐻(𝑃𝑡)，使得模型的预测分布熵尽可能大。
+- 熵可以理解成“分布的不确定性”：熵低：分布很集中，模型很自信；熵高：分布很分散，模型不确定。可以看出文章的思路为：对 forget set，不追求“答另一个具体内容”，而是让模型变得“不知道该答什么”。
+
+## ME+GD
+- 除了要解决如何在 forget set 上忘，还要求不能把 retain set 上本来会的东西也一起忘掉。
+- 公式为：<img width="606" height="59" alt="image" src="https://github.com/user-attachments/assets/d342a4c7-28b8-4791-aa1a-051a836ff4a7" />
+1. LME+GD​(θ)是最终总损失函数。训练时实际优化的就是它
+2. α是一个 hyper-parameter，用来控制遗忘强度，α 大：更强调 forget set 上的 unlearning；α 小：更强调 retain set 上的 utility preservation，目的是控制“忘多少”和“保留多少”之间的平衡
+3. ME 部分：把 forget set 上的 next-token 分布往均匀分布推
+4. GD 部分：把 retain set 上的正确答案概率继续往上拉
+
 ## 普通语言模型微调（基于参数优化的 unlearning fine-tuning）
 设模型参数是 θ，给定输入字符串 s，模型输出下一个 token 的概率分布记为 p(·|s; θ) 训练数据写成 D = {(x, y)} 其中：
 
