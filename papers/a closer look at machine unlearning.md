@@ -1,26 +1,7 @@
-# 大型语言模型的非目标性遗忘和目标性遗忘说明
-## untargeted unlearning
-- 只要求模型别泄露 forget set 内容，但不指定它该怎么回答，也就是说，“不许答对”就够了，但可以答错、乱答、含糊答。
- - 对 untargeted unlearning，不用“逼近某个不确定目标”，而改用 最大化每个token的预测熵，让模型在 forget set 上保持高不确定性，从而减少幻觉风险。
- - 俩个baseline：
-   1. Gradient Ascent, GA：是最直接的遗忘方法，在 forget set 上最大化 loss。
-      - 公式：<img width="466" height="62" alt="image" src="https://github.com/user-attachments/assets/b57264eb-1e68-466c-afea-896c980980eb" />
+# 《A Closer Look at Machine Unlearning for Large Language Models》笔记：LLM 遗忘的评估、范式与优化
 
-  L_GA：GA 的优化目标
-  D_F：forget set，要遗忘的数据
-  θ：模型参数，LLM内部可训练的权重
-  E：平均值，表示期望
-  -：让ℓ(y∣x;θ)在这个公式中表示反向优化，让模型忘掉这些数据是对 forget set 进行“反训练”：原本想让模型更会这个答案，现在想让模型更不会这个答案让模型在 forget set 上越来越答不好
-  (x,y)∼DF(x,y)：从 forget set D_F 中取样本对
-  x：输入
-  y：正确答案
-  [ℓ(y∣x;θ)]:对每个 forget 样本，计算它的预测损失
-
-## targeted unlearning
-- 明确要求模型在 forget set 上给出某种指定回答，比如拒答模板：“Sorry, I don’t know.”
-- AP loss 通过保留 retain set 上原答案的概率，避免模型把“拒答模板”泛化到正常问题上
-- retain set 需要被模型保留的训练数据子集，是forget set的补集
-
+- 将任务形式化为在忘掉 forget set 的同时保留 retain set/neighbor set 与一般知识能力；在评估上除 ROUGE、Probability、Truth Ratio 外，引入 TE、CS、ES，并聚合为 MU 与 FE；在方法上将参数优化式遗忘分为 untargeted（GA、NPO）与 targeted（IDK、DPO），并结合 GD、KL 正则形成七类 baseline，从而统一讨论如何忘、如何评估、如何尽量不伤及模型效用。
+  
 ## 普通语言模型微调（基于参数优化的 unlearning fine-tuning）
 设模型参数是 θ，给定输入字符串 s，模型输出下一个 token 的概率分布记为 p(·|s; θ) 训练数据写成 D = {(x, y)} 其中：
 
@@ -98,6 +79,56 @@ y：答案 / 输出
    - 两个聚合指标：MU 和 FE
      1. Model Utility (MU)是在 retain set 上，把所有指标取 harmonic mean（调和平均），目的是为了只要某一个指标特别差，MU 就会被明显拉低，综合看多项指标：字面匹配，概率，对错偏好，token 多样性，语义稳定，事实正确
      2. Forget Efficacy (FE)是在 forget set 上算的，但 不包括 TE，因为 TE 不依赖 ground truth。作者先对其他指标取均值，再用 1 减去这个均值得到 FE，FE 越高，表示模型在 forget set 上，忘得越彻底
+
+## untargeted unlearning
+- 只要求模型别泄露 forget set 内容，但不指定它该怎么回答，也就是说，“不许答对”就够了，但可以答错、乱答、含糊答。
+ - 对 untargeted unlearning，不用“逼近某个不确定目标”，而改用 最大化每个token的预测熵，让模型在 forget set 上保持高不确定性，从而减少幻觉风险。
+ - 俩个baseline：
+   1. Gradient Ascent, GA：是最直接的遗忘方法，在 forget set 上最大化 loss。
+      - 公式：<img width="466" height="62" alt="image" src="https://github.com/user-attachments/assets/b57264eb-1e68-466c-afea-896c980980eb" />
+
+  L_GA：GA 的优化目标
+  
+  D_F：forget set，要遗忘的数据
+  
+  θ：模型参数，LLM内部可训练的权重
+  
+  E：平均值，表示期望
+  
+  -：让ℓ(y∣x;θ)在这个公式中表示反向优化，让模型忘掉这些数据是对 forget set 进行“反训练”：原本想让模型更会这个答案，现在想让模型更不会这个答案让模型在 forget set 上越来越答不好
+  
+  (x,y)∼DF(x,y)：从 forget set D_F 中取样本对
+  
+  x：输入
+  
+  y：正确答案
+  
+  [ℓ(y∣x;θ)]:对每个 forget 样本，计算它的预测损失
+
+  2. NPO 是把原答案当成“不该被偏好”的负样本，按照偏好优化的方式、相对参考模型地把它压下去。
+  
+
+## targeted unlearning
+- 明确要求模型在 forget set 上给出某种指定回答，比如拒答模板：“Sorry, I don’t know.”
+- AP loss 通过保留 retain set 上原答案的概率，避免模型把“拒答模板”泛化到正常问题上
+- retain set 需要被模型保留的训练数据子集，是forget set的补集
+- Targeted 的两个 baseline：
+  1. IDK Fine-tune (IDK)
+     
+   把 forget set 上的问题重新标注成拒答模板，比如：“I don’t know.”   “Sorry, I don’t know.
+  
+  2. Direct Preference Optimization, DPO
+
+DPO 则把 forget set 原答案当作负样本，把拒答模板当正样本，直接做 偏好优化preference optimization
+
+### regularization（正则化）
+1. GD：Grad Descent
+
+GD 就是在 retain set 上继续做普通训练，一边在 forget set 上做“遗忘”，一边在 retain set 上做“记住”，GD 是“继续学 retain set 正确答案”。
+
+2. KL：Kullback-Leibler Divergence
+
+   要求 unlearned model 在 retain set 上的输出分布，不要偏离 reference model 太远，KL 是“别偏离原模型太多”
 
 
    
