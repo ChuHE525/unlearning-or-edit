@@ -50,6 +50,9 @@
   <img width="694" height="85" alt="image" src="https://github.com/user-attachments/assets/d1c070f3-dc21-44e3-90a8-1b7ed66db2d7" />
 
 - AP，目的是遇到 retain set 上的问题，模型应该更愿意正常回答，而不是说 “I don’t know”，指的就是在 retain set 上，让模型更偏向原始正确答案 𝑦，而不是拒答模板 𝑦′。公式为：<img width="926" height="96" alt="image" src="https://github.com/user-attachments/assets/e49294bc-da16-4325-9964-372d8a0bb870" />
+1. <img width="142" height="80" alt="image" src="https://github.com/user-attachments/assets/b9d377e4-27e1-4b06-a349-a018385aea5b" />，是一个“偏好比值”。如果这个比值大，说明模型更偏向拒答；如果这个比值小，说明模型更偏向原答案。
+2. σ(⋅)，sigmoid 函数，把一个数压到 0 到 1 之间
+
 - 对 AP loss 的梯度分析，公式为：<img width="904" height="84" alt="image" src="https://github.com/user-attachments/assets/005fba87-03c4-4394-af45-60a85cce7bda" />
 - IDK+AP，与IDK forget loss结合起来，为了在 forget set 上教模型拒答；在 retain set 上教模型别乱拒答。公式为：<img width="678" height="87" alt="image" src="https://github.com/user-attachments/assets/bf23f619-394c-4867-9000-e9c09673a018" />
 
