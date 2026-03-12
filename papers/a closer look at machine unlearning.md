@@ -31,6 +31,9 @@
 - 熵可以理解成“分布的不确定性”：熵低：分布很集中，模型很自信；熵高：分布很分散，模型不确定。所以说，对 forget set，不追求“答另一个具体内容”，而是让模型变得“不知道该答什么”。
 
 ### ME+GD
+
+- L_GD公式为：<img width="558" height="72" alt="image" src="https://github.com/user-attachments/assets/6c9cd231-4447-4cba-b796-f5371e06a747" />
+
 - 除了要解决如何在 forget set 上忘，还要求不能把 retain set 上本来会的东西也一起忘掉。
 - 公式为：<img width="606" height="59" alt="image" src="https://github.com/user-attachments/assets/d342a4c7-28b8-4791-aa1a-051a836ff4a7" />
 1. LME+GD​(θ)是最终总损失函数。训练时实际优化的就是它
