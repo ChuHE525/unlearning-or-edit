@@ -14,7 +14,7 @@
   4. x′=x∘y：问题 x 和答案 y 拼在一起，目的是：不仅在答案部分计算 forget loss，也在问题部分计算 forget loss
   5. 𝑇：拼接后序列 𝑥′的 token 总长度
   6. 𝑡=1,…,𝑇：表示在这个完整序列里，逐个看第 𝑡 个 token
-  7. Pt​=p(xt′​∣x<t′​;θ)：在已经看到前面 token 𝑥<𝑡的条件下，模型对第 𝑡 个 token 的预测概率分布，这是对整个词表的概率值分布；xt′：序列中的第 𝑡 个 token，x<t′：第 𝑡 个 token 前面的所有 token，p(xt′​∣x<t′​;θ)：模型给出的 next-token 概率分布
+  7. Pt​=p(xt′​∣x′<t​;θ)：在已经看到前面 token 𝑥<𝑡的条件下，模型对第 𝑡 个 token 的预测概率分布，这是对整个词表的概率值分布；xt′：序列中的第 𝑡 个 token，x<t′：第 𝑡 个 token 前面的所有 token，p(xt′​∣x<t′​;θ)：模型给出的 next-token 概率分布
   8. U[k]:K 是 vocabulary size，也就是词表大小；整体表示定义在K大小词表上的均匀分布，均匀分布意味着每个token的概率都一样
   9. 𝐾𝐿(𝑃𝑡∥𝑈[𝐾])：是 KL divergence，衡量模型当前预测分布 𝑃𝑡与均匀分布 𝑈[𝐾]的差异，如果 𝑃𝑡很接近均匀分布，KL 就小；如果𝑃𝑡很尖锐、很偏向少数 token，KL 就大，所以最小化这个 KL，就是在逼模型：不要太确定下一个 token 是什么
   10. <img width="137" height="63" alt="image" src="https://github.com/user-attachments/assets/8f3a2c45-225a-4d2b-9eee-298629e1b3fa" />：表示对一个样本里所有 token 的 KL divergence 取平均，目的是为了不是只让某几个 token 不确定，而是希望整条 forget sample 上，模型的预测都更接近均匀分布
