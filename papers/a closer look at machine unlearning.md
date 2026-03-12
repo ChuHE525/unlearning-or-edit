@@ -34,6 +34,9 @@
 
 - L_GD公式为：<img width="558" height="72" alt="image" src="https://github.com/user-attachments/assets/6c9cd231-4447-4cba-b796-f5371e06a747" />
 
+  1. p(y|x; θ) 表示模型在给定输入 x 时，预测正确输出 y 的概率
+  2. 负 log 就是取这个概率的对数的负值，因为当模型预测正确答案的概率越接近 1（越高），负对数值就越接近 0，也就是说损失越小，
+  3. 负 log p(y|x; θ) 就是一个损失函数，表示模型在保留集上的预测与真实答案差异，优化时就是要最小化这个损失，让模型在保留集上尽可能答对
 - 除了要解决如何在 forget set 上忘，还要求不能把 retain set 上本来会的东西也一起忘掉。
 - 公式为：<img width="606" height="59" alt="image" src="https://github.com/user-attachments/assets/d342a4c7-28b8-4791-aa1a-051a836ff4a7" />
 1. LME+GD​(θ)是最终总损失函数。训练时实际优化的就是它
