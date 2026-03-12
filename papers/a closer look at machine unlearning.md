@@ -38,6 +38,15 @@
 3. ME 部分：把 forget set 上的 next-token 分布往均匀分布推
 4. GD 部分：把 retain set 上的正确答案概率继续往上拉
 
+## AP loss
+- 解决targeted unlearning 容易“过度无知” 的问题，也就是模型不只在 forget set 上学会拒答，连 retain set 上本来会的问题也开始回答 “I don’t know”。
+- 正则项应该同时满足两件事：降低拒答模板的概率，保持原始正确答案的概率，因此AP loss作用是：在 retain set 上防止模型把拒答行为学泛化
+- 公式为：<img width="926" height="96" alt="image" src="https://github.com/user-attachments/assets/e49294bc-da16-4325-9964-372d8a0bb870" />
+- 对 AP loss 的梯度分析，公式为：<img width="904" height="84" alt="image" src="https://github.com/user-attachments/assets/005fba87-03c4-4394-af45-60a85cce7bda" />
+- IDK+AP，与IDK forget loss结合起来，为了在 forget set 上教模型拒答；在 retain set 上教模型别乱拒答。公式为：<img width="678" height="87" alt="image" src="https://github.com/user-attachments/assets/bf23f619-394c-4867-9000-e9c09673a018" />
+
+
+
 ## 普通语言模型微调（基于参数优化的 unlearning fine-tuning）
 设模型参数是 θ，给定输入字符串 s，模型输出下一个 token 的概率分布记为 p(·|s; θ) 训练数据写成 D = {(x, y)} 其中：
 
