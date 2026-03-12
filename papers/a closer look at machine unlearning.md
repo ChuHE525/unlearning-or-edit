@@ -4,7 +4,7 @@
   
 ## ME loss（Maximizing Entropy loss）
 - 直接让它在 forget set 上对 next-token 预测变得高熵、接近均匀分布，也就是“不确定”。同时再用 GD 保持 retain set 上的正常性能，因此 ME+GD 就实现了“该忘的变不确定，不该忘的尽量保住”。
-- 公式为：
+- ME公式为：
 
   <img width="656" height="102" alt="image" src="https://github.com/user-attachments/assets/962d6094-bbcb-41f5-8158-23f5eb611194" />
   
