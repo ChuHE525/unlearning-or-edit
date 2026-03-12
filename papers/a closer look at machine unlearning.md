@@ -3,7 +3,7 @@
 - 论证了为什么现有 untargeted / targeted 都有结构性问题，再分别给出这两个对应方案：untargeted：ME+GD；targeted：IDK+AP。
   
 ## ME loss（Maximizing Entropy loss）
-- 给 untargeted unlearning 设计的新的forget loss——让模型在 forget set 上变得不确定,就是对forget set上每个 token 的预测都尽量接近均匀分布。
+- 直接让它在 forget set 上对 next-token 预测变得高熵、接近均匀分布，也就是“不确定”。同时再用 GD 保持 retain set 上的正常性能，因此 ME+GD 就实现了“该忘的变不确定，不该忘的尽量保住”。
 - 公式为：
 
   <img width="656" height="102" alt="image" src="https://github.com/user-attachments/assets/962d6094-bbcb-41f5-8158-23f5eb611194" />
@@ -30,7 +30,7 @@
 - 因此，最小化 𝐾𝐿(𝑃𝑡∥𝑈[𝐾])等价于最大化 𝐻(𝑃𝑡)，使得模型的预测分布熵尽可能大。
 - 熵可以理解成“分布的不确定性”：熵低：分布很集中，模型很自信；熵高：分布很分散，模型不确定。可以看出文章的思路为：对 forget set，不追求“答另一个具体内容”，而是让模型变得“不知道该答什么”。
 
-## ME+GD
+### ME+GD
 - 除了要解决如何在 forget set 上忘，还要求不能把 retain set 上本来会的东西也一起忘掉。
 - 公式为：<img width="606" height="59" alt="image" src="https://github.com/user-attachments/assets/d342a4c7-28b8-4791-aa1a-051a836ff4a7" />
 1. LME+GD​(θ)是最终总损失函数。训练时实际优化的就是它
