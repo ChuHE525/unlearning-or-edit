@@ -44,8 +44,11 @@
 3. ME 部分：把 forget set 上的 next-token 分布往均匀分布推
 4. GD 部分：把 retain set 上的正确答案概率继续往上拉
 
-## AP loss
-- 在 forget set 上学会“拒答”，但在 retain set 上不要乱拒答，明确输出拒答模板
+## IDK+AP
+- 作用在targeted forget loss，在 forget set 上学会“拒答”，但在 retain set 上不要乱拒答，明确输出拒答模板
+- IDK对 forget set 里的问题 𝑥不再配原始答案，而是随机配一个拒答模板 𝑦，这个模板来自 𝐷_𝐼𝐷𝐾,比如 “I don’t know.”、“Sorry, I don’t know.”，公式为：
+  <img width="694" height="85" alt="image" src="https://github.com/user-attachments/assets/d1c070f3-dc21-44e3-90a8-1b7ed66db2d7" />
+
 - 公式为：<img width="926" height="96" alt="image" src="https://github.com/user-attachments/assets/e49294bc-da16-4325-9964-372d8a0bb870" />
 - 对 AP loss 的梯度分析，公式为：<img width="904" height="84" alt="image" src="https://github.com/user-attachments/assets/005fba87-03c4-4394-af45-60a85cce7bda" />
 - IDK+AP，与IDK forget loss结合起来，为了在 forget set 上教模型拒答；在 retain set 上教模型别乱拒答。公式为：<img width="678" height="87" alt="image" src="https://github.com/user-attachments/assets/bf23f619-394c-4867-9000-e9c09673a018" />
