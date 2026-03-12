@@ -1,6 +1,7 @@
 # 《A Closer Look at Machine Unlearning for Large Language Models》LLM 遗忘的评估、范式与优化
 
-- 论证了为什么现有 untargeted / targeted 都有结构性问题，再分别给出这两个对应方案：untargeted：ME+GD；targeted：IDK+AP。
+- 论证了为什么现有 untargeted / targeted unlearning都有结构性问题，再分别给出这两个对应方案：untargeted：ME+GD；targeted：IDK+AP。
+- 结构性问题是指untargeted 是不受控的模糊遗忘，而 targeted 是容易造成不必要拒答的过度遗忘。
   
 ## ME loss（Maximizing Entropy loss）
 - 直接让它在 forget set 上对 next-token 预测变得高熵、接近均匀分布，也就是“不确定”。同时再用 GD 保持 retain set 上的正常性能，因此 ME+GD 就实现了“该忘的变不确定，不该忘的尽量保住”。
