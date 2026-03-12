@@ -53,7 +53,10 @@
 1. <img width="142" height="80" alt="image" src="https://github.com/user-attachments/assets/b9d377e4-27e1-4b06-a349-a018385aea5b" />，是一个“偏好比值”。如果这个比值大，说明模型更偏向拒答；如果这个比值小，说明模型更偏向原答案。
 2. σ(⋅)，sigmoid 函数，把一个数压到 0 到 1 之间
 
-- 对 AP loss 的梯度分析，公式为：<img width="904" height="84" alt="image" src="https://github.com/user-attachments/assets/005fba87-03c4-4394-af45-60a85cce7bda" />
+- 对 AP loss 的梯度分析，AP 的梯度本质就是：把 retain set 上“不该有的拒答倾向”压下去，把 retain set 上“本来该会的答案”，拉回来公式为：<img width="904" height="84" alt="image" src="https://github.com/user-attachments/assets/005fba87-03c4-4394-af45-60a85cce7bda" />
+
+- 并且定义：Wθ就是自适应权重，模型越有“乱拒答”的趋势，AP 正则就越强。<img width="460" height="133" alt="image" src="https://github.com/user-attachments/assets/512671f4-8ae7-4e84-8831-a44596f49c65" />
+
 - IDK+AP，与IDK forget loss结合起来，为了在 forget set 上教模型拒答；在 retain set 上教模型别乱拒答。公式为：<img width="678" height="87" alt="image" src="https://github.com/user-attachments/assets/bf23f619-394c-4867-9000-e9c09673a018" />
 
 
