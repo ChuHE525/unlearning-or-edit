@@ -132,103 +132,69 @@ WGA：进一步细化到 token 级别做加权，实现更细粒度的 unlearnin
 
 
 
+
+
 ## 1. 局部 belief 的 top-k 集合
 
 公式：
-
-$$H_k^{(i)} = \mathrm{Top}\text{-}k ( \pi_\theta(\cdot \mid x_u, y_u^{<i}) )$$
-
-字母含义：
+$$H_k^{(i)} = \mathrm{Top}\text{-}k ( \pi_{\theta} ( \cdot \mid x_u, y_u^{\lt i} ) )$$
 
 * $H_k^{(i)}$：第 $i$ 个位置上的 top-$k$ 高概率 token 集合
-* $k$：取前多少个高概率 token
-* $i$：当前 token 位置
-* $\pi_\theta(\cdot \mid x_u, y_u^{<i})$：模型在输入 $x_u$ 和前缀 $y_u^{<i}$ 条件下，对下一个 token 的概率分布
-* $\theta$：当前模型参数
-* $x_u$：forget prompt，即需要遗忘的输入
-* $y_u^{<i}$：目标序列在第 $i$ 个位置之前的前缀
-* $\mathrm{Top}\text{-}k(\cdot)$：取概率最高的前 $k$ 个 token
+* $\pi_{\theta} ( \cdot \mid x_u, y_u^{\lt i} )$：模型在给定前缀下的概率分布
+* $\mathrm{Top}\text{-}k(\cdot)$：取概率最高的前 $k$ 个
 
 ---
 
 ## 2. 全局 belief 的序列采样
 
 公式：
+$$\hat{y}_u \sim \pi_{\theta} ( \cdot \mid x_u )$$
 
-$$\hat{y}_u \sim \pi_\theta(\cdot \mid x_u)$$
-
-字母含义：
-
-* $\hat{y}_u$：模型基于 forget prompt $x_u$ 生成的一条高置信完整序列
-* $\pi_\theta(\cdot \mid x_u)$：模型在输入 $x_u$ 下，对所有可能输出序列的分布
+* $\hat{y}_u$：模型生成的完整高置信序列
 
 ---
 
 ## 3. BS-T 的 soft target
 
 公式：
+$$t_u^i = \lambda_{\mathrm{BST}} \mathrm{sg} ( \pi_{\theta} ( \cdot \mid x_u, y_u^{\lt i} ) \mid_{H_k^{(i)}} ) + (1 - \lambda_{\mathrm{BST}}) e_{y_u^i}$$
 
-$$t_u^i = \lambda_{\mathrm{BST}} \mathrm{sg} ( \pi_\theta(\cdot \mid x_u, y_u^{<i}) \vert_{H_k^{(i)}} ) + (1-\lambda_{\mathrm{BST}})e_{y_u^i} \tag{5}$$
-
-字母含义：
-
-* $t_u^i$：第 $i$ 个位置上的 soft unlearning target
-* $\lambda_{\mathrm{BST}}$：BS-T 的混合系数
-* $\mathrm{sg}(\cdot)$：stop-gradient，表示这一项不参与梯度回传
-* $\pi_\theta(\cdot \mid x_u, y_u^{<i}) \vert_{H_k^{(i)}}$：当前位置的模型概率分布，但只保留 top-$k$ 部分
+* $\mathrm{sg}(\cdot)$：stop-gradient（梯度截断）
 * $e_{y_u^i}$：目标 token 的 one-hot 向量
+* $\lambda_{\mathrm{BST}}$：混合权重参数
 
 ---
 
 ## 4. BS-T 的 token-level loss
 
 公式：
+$$L_{\mathrm{BST}}(\theta; D_u) = \mathbb{E}_{D_u} [ \sum_{i=1}^{\vert y_u \vert} \langle t_u^i, \log \pi_{\theta} ( \cdot \mid x_u, y_u^{\lt i} ) \rangle ]$$
 
-$$L_{\mathrm{BST}}(\theta; D_u) = \mathbb{E}_{D_u} [ \sum_{i=1}^{|y_u|} \langle t_u^i, \log \pi_\theta(\cdot \mid x_u, y_u^{<i}) \rangle ] \tag{6}$$
-
-字母含义：
-
-* $L_{\mathrm{BST}}(\theta; D_u)$：BS-T 在遗忘集上的总损失
-* $\mathbb{E}_{D_u}[\cdot]$：对遗忘集取期望（平均）
-* $\langle a,b \rangle$：向量内积
+* $\vert y_u \vert$：序列长度
+* $\langle a, b \rangle$：向量内积
 
 ---
 
 ## 5. BS-S 的辅助 forget set
 
 公式：
+$$\hat{D}_u = \lbrace (x_u, \hat{y}_u^{(j)}) \rbrace_{j=1}^{N}$$
 
-$$\hat{D}_u = \{ (x_u, \hat{y}_u^{(j)}) \}_{j=1}^{N}$$
+公式：
+$$\hat{y}_u^{(j)} \sim \pi_{\theta} ( \cdot \mid x_u )$$
 
-以及
-
-$$\hat{y}_u^{(j)} \sim \pi_\theta(\cdot \mid x_u)$$
-
-字母含义：
-
-* $\hat{D}_u$：由模型自己生成的高置信序列构成的辅助集合
-* $N$：采样序列的数量
+* $\hat{D}_u$：模型自生成的辅助遗忘集
+* $N$：采样序列的总数
 
 ---
 
 ## 6. BS-S 的总目标
 
 公式：
+$$L_{\mathrm{BSS}} = (1 - \lambda_{\mathrm{BSS}}) L(\theta; D_u) + \lambda_{\mathrm{BSS}} L(\theta; \hat{D}_u)$$
 
-$$L_{\mathrm{BSS}} = (1-\lambda_{\mathrm{BSS}}) L(\theta; D_u) + \lambda_{\mathrm{BSS}} L(\theta; \hat{D}_u) \tag{7}$$
-
-字母含义：
-
-* $L_{\mathrm{BSS}}$：BS-S 的总损失
-* $\lambda_{\mathrm{BSS}}$：混合系数
-* $L(\theta; D_u)$：原始数据上的遗忘损失
-* $L(\theta; \hat{D}_u)$：采样数据上的遗忘损失
-
----
-
-# 一句话总结
-
-**BS-T 负责在 token 级别压制“呼之欲出”的候选词，而 BS-S 负责在句子级别压制模型可能“换种说法”生成的回答。**
+* $L(\theta; D_u)$：在原始数据上的遗忘损失
+* $L(\theta; \hat{D}_u)$：在生成数据上的遗忘损失
 
 
 
