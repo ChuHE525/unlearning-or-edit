@@ -127,17 +127,12 @@ WGA：进一步细化到 token 级别做加权，实现更细粒度的 unlearnin
 
 - 第三节的核心是在说明：现有 unlearning 经常只是“表面忘记”，真正原因是压低目标答案后，概率质量被 softmax 挤到高概率的语义相近改写区域，因此模型仍会通过 paraphrase 泄漏知识。
 - 第四节提出 belief-aware unlearning：不只忘原答案，还要忘模型会逃到的高置信改写区域；方法上通过 bootstrapping 把模型自己的高概率预测变成辅助 unlearning 信号。
-- 为了让这份笔记在 GitHub 的 `.md` 文件中完美渲染，我帮你对格式进行了优化。
-
-GitHub 的 MathJax 渲染器有时会对 `$$` 块内的纯回车换行比较敏感，如果不使用 `\begin{aligned}` 等环境，直接换行可能会导致公式渲染失败。另外，行内公式的 `$` 两侧内部绝对不能有空格。我已经帮你把独立公式压缩成了标准且安全的单行格式，并确保了所有标记符号的严谨性。
-
-
 
 ## 1. 局部 belief 的 top-k 集合
 
 公式：
 
-$$H_k^{(i)}=\operatorname{Top}\text{-}k\!\big(\pi_\theta(\cdot \mid x_u,\; y_u^{<i})\big)$$
+$$H_k^{(i)}=\mathrm{Top}\text{-}k\!\big(\pi_\theta(\cdot \mid x_u,\; y_u^{<i})\big)$$
 
 字母含义：
 
@@ -148,7 +143,7 @@ $$H_k^{(i)}=\operatorname{Top}\text{-}k\!\big(\pi_\theta(\cdot \mid x_u,\; y_u^{
 * $\theta$：当前模型参数
 * $x_u$：forget prompt，即需要遗忘的输入
 * $y_u^{<i}$：目标序列在第 $i$ 个位置之前的前缀
-* $\operatorname{Top}\text{-}k(\cdot)$：取概率最高的前 $k$ 个 token
+* $\mathrm{Top}\text{-}k(\cdot)$：取概率最高的前 $k$ 个 token
 
 公式用途：
 
@@ -180,13 +175,13 @@ $$\hat{y}_u \sim \pi_\theta(\cdot \mid x_u)$$
 
 公式：
 
-$$t_u^i = \lambda_{\mathrm{BST}}\, \operatorname{sg}\!\left( \pi_\theta(\cdot \mid x_u,\; y_u^{<i})\big|_{H_k^{(i)}} \right) + \left(1-\lambda_{\mathrm{BST}}\right)e_{y_u^i} \tag{5}$$
+$$t_u^i = \lambda_{\mathrm{BST}}\, \mathrm{sg}\!\left( \pi_\theta(\cdot \mid x_u,\; y_u^{<i})\big|_{H_k^{(i)}} \right) + \left(1-\lambda_{\mathrm{BST}}\right)e_{y_u^i} \tag{5}$$
 
 字母含义：
 
 * $t_u^i$：第 $i$ 个位置上的 soft unlearning target
 * $\lambda_{\mathrm{BST}}$：BS-T 的混合系数，用来控制 belief 分布所占权重
-* $\operatorname{sg}(\cdot)$：stop-gradient，表示这一项只作为目标使用，不让梯度反传进去
+* $\mathrm{sg}(\cdot)$：stop-gradient，表示这一项只作为目标使用，不让梯度反传进去
 * $\pi_\theta(\cdot \mid x_u,\; y_u^{<i})\big|_{H_k^{(i)}}$：当前位置的模型概率分布，但只保留 top-$k$ 高概率 token 所对应的部分
 * $H_k^{(i)}$：第 $i$ 个位置上的 top-$k$ 高概率 token 集合
 * $e_{y_u^i}$：目标 token $y_u^i$ 的 one-hot 向量
@@ -292,7 +287,7 @@ $$\min_\theta L_{\mathrm{BSS}}$$
 # 最后总结：这些公式分别在干什么
 
 ## 公式 1
-$$H_k^{(i)}=\operatorname{Top}\text{-}k\!\big(\pi_\theta(\cdot \mid x_u,\; y_u^{<i})\big)$$
+$$H_k^{(i)}=\mathrm{Top}\text{-}k\!\big(\pi_\theta(\cdot \mid x_u,\; y_u^{<i})\big)$$
 **用途：** 定义 token-level 的高概率 belief 区域。
 
 ## 公式 2
@@ -300,7 +295,7 @@ $$\hat{y}_u \sim \pi_\theta(\cdot \mid x_u)$$
 **用途：** 定义 sequence-level 的高置信 belief 序列。
 
 ## 公式 3
-$$t_u^i = \lambda_{\mathrm{BST}}\, \operatorname{sg}\!\left( \pi_\theta(\cdot \mid x_u,\; y_u^{<i})\big|_{H_k^{(i)}} \right) + \left(1-\lambda_{\mathrm{BST}}\right)e_{y_u^i}$$
+$$t_u^i = \lambda_{\mathrm{BST}}\, \mathrm{sg}\!\left( \pi_\theta(\cdot \mid x_u,\; y_u^{<i})\big|_{H_k^{(i)}} \right) + \left(1-\lambda_{\mathrm{BST}}\right)e_{y_u^i}$$
 **用途：** 把原始 target token 和 top-$k$ belief token 混合成 soft target。
 
 ## 公式 4
@@ -314,14 +309,6 @@ $$\hat{D}_u=\left\{(x_u,\hat{y}_u^{(j)})\right\}_{j=1}^{N}$$
 ## 公式 6
 $$L_{\mathrm{BSS}} = \left(1-\lambda_{\mathrm{BSS}}\right)L(\theta; D_u) + \lambda_{\mathrm{BSS}}L(\theta; \hat{D}_u)$$
 **用途：** 在 sequence level 同时压制原始 forget answers 和模型自己生成的高置信改写 answers。
-
----
-
-# 一句话总括第四节公式
-
-第四节所有公式共同服务于一个目标：
-
-**不仅删除原始 target response，还删除模型会借助 squeezing effect 转移到的高概率 token 区域和高概率改写序列，从而实现更真实的 unlearning。**
 
 
 
