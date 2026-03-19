@@ -138,12 +138,14 @@ WGA：进一步细化到 token 级别做加权，实现更细粒度的 unlearnin
 
 
 
+
+
 ## 1. 局部 belief 的 top-k 集合
 
 公式：
 
 $$
-H_k^{(i)} = \operatorname{Top}\text{-}k \big( \pi_\theta(\cdot \mid x_u, y_u^{<i}) \big)
+H_k^{(i)} = \mathrm{Top\text{-}k} \big( \pi_\theta(\cdot \mid x_u, y_u^{<i}) \big)
 $$
 
 字母含义：
@@ -155,7 +157,6 @@ $$
 - $\theta$：当前模型参数
 - $x_u$：forget prompt
 - $y_u^{<i}$：目标序列在第 $i$ 个位置之前的前缀
-- $\operatorname{Top}\text{-}k(\cdot)$：从概率分布中选出概率最高的前 $k$ 个 token
 
 关键解释：
 
@@ -185,18 +186,17 @@ $$
 
 ---
 
-## 3. 定义 restricted belief distribution
+## 3. restricted belief distribution
 
-为了让 GitHub 正常显示，把“限制在 top-k 集合上并重新归一化的分布”单独定义成：
+公式：
 
 $$
-q_u^{(i)} = \operatorname{Renorm}_{H_k^{(i)}} \big( \pi_\theta(\cdot \mid x_u, y_u^{<i}) \big)
+q_u^{(i)} = \mathrm{Renorm}_{H_k^{(i)}} \big( \pi_\theta(\cdot \mid x_u, y_u^{<i}) \big)
 $$
 
 字母含义：
 
 - $q_u^{(i)}$：第 $i$ 个位置上，限制在 $H_k^{(i)}$ 内并重新归一化后的 belief 分布
-- $\operatorname{Renorm}_{H_k^{(i)}}(\cdot)$：表示只保留 $H_k^{(i)}$ 中的 token，并把概率重新归一化
 - $H_k^{(i)}$：第 $i$ 个位置上的 top-$k$ 高概率 token 集合
 - $\pi_\theta(\cdot \mid x_u, y_u^{<i})$：原始 token 概率分布
 - $\theta$：当前模型参数
@@ -205,7 +205,7 @@ $$
 
 关键解释：
 
-这一步只是把论文里“restricted to top-k”的那部分单独记成一个新符号，数学含义不变，但 GitHub 更容易正常渲染。
+这一步只是把“限制在 top-k 集合上并重新归一化后的分布”单独记成一个新符号，方便后面写公式，也更容易在 GitHub 正常显示。
 
 ---
 
@@ -214,14 +214,14 @@ $$
 公式：
 
 $$
-t_u^{(i)} = \lambda_{\mathrm{BST}} \, \operatorname{sg}(q_u^{(i)}) + \big(1 - \lambda_{\mathrm{BST}}\big) e_{y_u^{(i)}}
+t_u^{(i)} = \lambda_{\mathrm{BST}} \, \mathrm{sg}(q_u^{(i)}) + \big( 1 - \lambda_{\mathrm{BST}} \big) e_{y_u^{(i)}}
 $$
 
 字母含义：
 
 - $t_u^{(i)}$：第 $i$ 个位置上的 soft unlearning target
 - $\lambda_{\mathrm{BST}}$：BS-T 的混合系数，用来控制 belief 分布所占权重
-- $\operatorname{sg}(\cdot)$：stop-gradient，表示这一项只作为目标使用，不让梯度反向传回去
+- $\mathrm{sg}(\cdot)$：stop-gradient，表示这一项只作为目标使用，不让梯度反向传回去
 - $q_u^{(i)}$：限制在 top-$k$ 区域上的 belief 分布
 - $e_{y_u^{(i)}}$：目标 token $y_u^{(i)}$ 的 one-hot 向量
 - $y_u^{(i)}$：forget target 序列在第 $i$ 个位置上的 token
@@ -248,10 +248,10 @@ L_{\mathrm{BST}}(\theta; D_u)
 \mathbb{E}_{D_u}
 \left[
 \sum_{i=1}^{|y_u|}
-\left\langle
+\langle
 t_u^{(i)},
 \log \pi_\theta(\cdot \mid x_u, y_u^{<i})
-\right\rangle
+\rangle
 \right]
 $$
 
@@ -318,7 +318,7 @@ $$
 $$
 L_{\mathrm{BSS}}
 =
-\big(1 - \lambda_{\mathrm{BSS}}\big) L(\theta; D_u)
+\big( 1 - \lambda_{\mathrm{BSS}} \big) L(\theta; D_u)
 +
 \lambda_{\mathrm{BSS}} L(\theta; \hat{D}_u)
 $$
@@ -356,7 +356,7 @@ $$
 ### 第一步：定位局部高概率区域
 
 $$
-H_k^{(i)} = \operatorname{Top}\text{-}k \big( \pi_\theta(\cdot \mid x_u, y_u^{<i}) \big)
+H_k^{(i)} = \mathrm{Top\text{-}k} \big( \pi_\theta(\cdot \mid x_u, y_u^{<i}) \big)
 $$
 
 作用：找到当前位置最危险的高概率 token 邻域。
@@ -364,7 +364,7 @@ $$
 ### 第二步：构造 restricted belief distribution
 
 $$
-q_u^{(i)} = \operatorname{Renorm}_{H_k^{(i)}} \big( \pi_\theta(\cdot \mid x_u, y_u^{<i}) \big)
+q_u^{(i)} = \mathrm{Renorm}_{H_k^{(i)}} \big( \pi_\theta(\cdot \mid x_u, y_u^{<i}) \big)
 $$
 
 作用：把局部高概率区域中的 token 分布单独提取出来。
@@ -372,7 +372,7 @@ $$
 ### 第三步：构造 token-level soft target
 
 $$
-t_u^{(i)} = \lambda_{\mathrm{BST}} \, \operatorname{sg}(q_u^{(i)}) + \big(1 - \lambda_{\mathrm{BST}}\big) e_{y_u^{(i)}}
+t_u^{(i)} = \lambda_{\mathrm{BST}} \, \mathrm{sg}(q_u^{(i)}) + \big( 1 - \lambda_{\mathrm{BST}} \big) e_{y_u^{(i)}}
 $$
 
 作用：把原始 target token 和高概率 belief token 混合。
@@ -385,10 +385,10 @@ L_{\mathrm{BST}}(\theta; D_u)
 \mathbb{E}_{D_u}
 \left[
 \sum_{i=1}^{|y_u|}
-\left\langle
+\langle
 t_u^{(i)},
 \log \pi_\theta(\cdot \mid x_u, y_u^{<i})
-\right\rangle
+\rangle
 \right]
 $$
 
@@ -415,7 +415,7 @@ $$
 $$
 L_{\mathrm{BSS}}
 =
-\big(1 - \lambda_{\mathrm{BSS}}\big) L(\theta; D_u)
+\big( 1 - \lambda_{\mathrm{BSS}} \big) L(\theta; D_u)
 +
 \lambda_{\mathrm{BSS}} L(\theta; \hat{D}_u)
 $$
