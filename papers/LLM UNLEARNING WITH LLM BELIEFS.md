@@ -128,5 +128,63 @@ WGA：进一步细化到 token 级别做加权，实现更细粒度的 unlearnin
 - 第三节的核心是在说明：现有 unlearning 经常只是“表面忘记”，真正原因是压低目标答案后，概率质量被 softmax 挤到高概率的语义相近改写区域，因此模型仍会通过 paraphrase 泄漏知识。
 - 第四节提出 belief-aware unlearning：不只忘原答案，还要忘模型会逃到的高置信改写区域；方法上通过 bootstrapping 把模型自己的高概率预测变成辅助 unlearning 信号。
 
+## 1. 局部 belief 的 top-k 集合
+## 公式 2
+$$
+\hat{y}_u \sim \pi_\theta(\cdot \mid x_u)
+$$
+用途：定义 sequence-level 的高置信 belief 序列。
+
+## 公式 3
+$$
+t_u^i
+=
+\lambda_{\mathrm{BST}}\,
+\operatorname{sg}\!\left(
+\pi_\theta(\cdot \mid x_u,\; y_u^{<i})\big|_{H_k^{(i)}}
+\right)
++
+\left(1-\lambda_{\mathrm{BST}}\right)e_{y_u^i}
+$$
+用途：把原始 target token 和 top-$k$ belief token 混合成 soft target。
+
+## 公式 4
+$$
+L_{\mathrm{BST}}(\theta; D_u)
+=
+\mathbb{E}_{D_u}
+\left[
+\sum_{i=1}^{|y_u|}
+\left\langle
+t_u^i,\;
+\log \pi_\theta(\cdot \mid x_u,\; y_u^{<i})
+\right\rangle
+\right]
+$$
+用途：在 token level 同时压制 target token 和高概率 belief token。
+
+## 公式 5
+$$
+\hat{D}_u=\left\{(x_u,\hat{y}_u^{(j)})\right\}_{j=1}^{N}
+$$
+用途：构造 sequence-level 的辅助 forget set。
+
+## 公式 6
+$$
+L_{\mathrm{BSS}}
+=
+\left(1-\lambda_{\mathrm{BSS}}\right)L(\theta; D_u)
++
+\lambda_{\mathrm{BSS}}L(\theta; \hat{D}_u)
+$$
+用途：在 sequence level 同时压制原始 forget answers 和模型自己生成的高置信改写 answers。
+
+---
+
+# 一句话总括第四节公式
+第四节所有公式共同服务于一个目标：
+**不仅删除原始 target response，还删除模型会借助 squeezing effect 转移到的高概率 token 区域和高概率改写序列，从而实现更真实的 unlearning。**
+
+
 
 
