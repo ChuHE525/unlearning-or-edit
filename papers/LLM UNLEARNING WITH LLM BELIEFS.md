@@ -6,13 +6,13 @@
 那 unlearning 时就不能只压 target response，
 还要一起压制这些模型自己高置信生成的内容。
 
-作者把这些内容叫做：
+
 
 model beliefs
 
 也就是模型当前最相信、最可能生成的 token 或 sequence。
 
-- 于是他们提出一个：
+提出一个：
 
 bootstrapping (BS) framework
 
@@ -125,8 +125,8 @@ NPO：把当前模型与原模型在 forget sample 上的概率做比值，实�
 
 WGA：进一步细化到 token 级别做加权，实现更细粒度的 unlearning。
 
-- 第三节的核心是在说明：现有 unlearning 经常只是“表面忘记”，真正原因是压低目标答案后，概率质量被 softmax 挤到高概率的语义相近改写区域，因此模型仍会通过 paraphrase 泄漏知识。
-- 第四节提出 belief-aware unlearning：不只忘原答案，还要忘模型会逃到的高置信改写区域；方法上通过 bootstrapping 把模型自己的高概率预测变成辅助 unlearning 信号。
+- 现有 unlearning 经常只是“表面忘记”，真正原因是压低目标答案后，概率质量被 softmax 挤到高概率的语义相近改写区域，因此模型仍会通过 paraphrase 泄漏知识。
+-  belief-aware unlearning：不只忘原答案，还要忘模型会逃到的高置信改写区域；方法上通过 bootstrapping 把模型自己的高概率预测变成辅助 unlearning 信号。
 
 
 
