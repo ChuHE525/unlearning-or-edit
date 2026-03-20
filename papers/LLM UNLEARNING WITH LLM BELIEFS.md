@@ -92,31 +92,21 @@ y<i：第
 
 - 四个公式的核心含义
 
-GA：直接降低 forget response 的 likelihood。
+* GA：直接降低 forget response 的 likelihood。
 
-GradDiff：在 GA 基础上加 retain loss，试图保护正常能力。
+* GradDiff：在 GA 基础上加 retain loss，试图保护正常能力。
 
-NPO：把当前模型与原模型在 forget sample 上的概率做比值，实现 instance-wise reweighting。
+* NPO：把当前模型与原模型在 forget sample 上的概率做比值，实现 instance-wise reweighting。
 
-WGA：进一步细化到 token 级别做加权，实现更细粒度的 unlearning。
+* WGA：进一步细化到 token 级别做加权，实现更细粒度的 unlearning。
 
-model beliefs
+model beliefs也就是模型当前最相信、最可能生成的 token 或 sequence。
 
-也就是模型当前最相信、最可能生成的 token 或 sequence。
 
-提出一个：
 
-bootstrapping (BS) framework
+bootstrapping (BS) framework意思是：利用模型自己生成出来的高置信内容把这些内容再反过来作为 unlearning 信号一起参与“遗忘”
 
-意思是：
-
-利用模型自己生成出来的高置信内容
-
-把这些内容再反过来作为 unlearning 信号
-
-一起参与“遗忘”
-
-第一节里还提前概括了两个版本：
+- 两个版本：
 
 BS-T：token level
 把 target token 和模型高概率 token 一起压制。
