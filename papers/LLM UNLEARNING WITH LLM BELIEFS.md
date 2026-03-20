@@ -181,39 +181,10 @@ BS-S：sequence level
 
 ---
 
-## 3. Restricted belief distribution
 
-### 公式
 
-```math
-q_u^{(i)}(v)
-=
-\frac{
-\pi_\theta(v \mid x_u, y_u^{<i})
-}{
-\sum_{v' \in H_k^{(i)}} \pi_\theta(v' \mid x_u, y_u^{<i})
-}
-\quad \text{for } v \in H_k^{(i)}
-```
-
-### 字母含义
-
-- \(q_u^{(i)}(v)\)：第 \(i\) 个位置上，token \(v\) 在 restricted belief distribution 下的概率  
-- \(H_k^{(i)}\)：第 \(i\) 个位置上的 top-k 高概率 token 集合  
-- \(\pi_\theta(v \mid x_u, y_u^{<i})\)：原始 token 概率分布  
-- \(\theta\)：当前模型参数  
-- \(x_u\)：forget prompt  
-- \(y_u^{<i}\)：当前位置之前的前缀  
-- \(v\)：词表中的某个 token  
-- \(v'\)：求和时的中间 token 变量  
-
-### 关键解释
-
-这一步表示：只保留 top-k 区域里的概率，然后重新归一化。这样就把局部高概率区域单独提取成一个新的 belief 分布。
-
----
-
-## 4. BS-T 的 soft target
+## 3. BS-T 的 soft target
+- BS-T 的目标是解决 token-level 的 squeezing effect
 
 ### 公式
 
@@ -226,17 +197,18 @@ t_u^{(i)} =
 
 ### 字母含义
 
-- \(t_u^{(i)}\)：第 \(i\) 个位置上的 soft unlearning target  
-- \(\lambda_{\mathrm{BST}}\)：BS-T 的混合系数，用来控制 belief 分布所占权重  
-- \(\mathrm{sg}(\cdot)\)：stop-gradient，表示这一项只作为目标使用，不让梯度反向传回去  
-- \(q_u^{(i)}\)：限制在 top-k 区域上的 belief 分布  
-- \(e_{y_u^{(i)}}\)：目标 token \(y_u^{(i)}\) 的 one-hot 向量  
-- \(y_u^{(i)}\)：forget target 序列在第 \(i\) 个位置上的 token  
-- \(i\)：当前 token 位置  
+<img width="830" height="407" alt="image" src="https://github.com/user-attachments/assets/df0fac70-e9ff-4576-a979-fd924057de18" />
+
 
 ### 关键解释
+- “把 target token 和模型最想逃去的那些 top-k 高概率 token，一起压低。”
 
-这是 token-level bootstrapping 的核心。它把两部分混合成一个 soft target：
+也就是说，遗忘信号不再只打在一个点上，而是扩展到了 target 附近那片语义相近、高概率的区域。
+这正是用来对抗 squeezing effect 的。
+
+这里 stop-gradient 也很关键。它的作用是把当前模型分布当成一个“固定 teacher target”，避免模型一边生成 belief、一边又直接对 belief 本身求梯度，导致训练不稳定。
+
+- 这是 token-level bootstrapping 的核心。它把两部分混合成一个 soft target：
 
 1. 原始目标 token  
 2. 模型当前最可能逃去的高概率 token 分布  
