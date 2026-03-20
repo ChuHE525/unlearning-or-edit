@@ -320,9 +320,8 @@ L_{\mathrm{BSS}}
 
 ### 第一步：定位局部高概率区域
 
-```math
-H_k^{(i)} = \mathrm{TopK}(\pi_\theta(\cdot \mid x_u, y_u^{<i}))
-```
+<img width="372" height="65" alt="image" src="https://github.com/user-attachments/assets/b5891546-0f1a-43a7-92ed-0ec5fd1d19ed" />
+
 
 **作用：** 找到当前位置最危险的高概率 token 邻域。
 
