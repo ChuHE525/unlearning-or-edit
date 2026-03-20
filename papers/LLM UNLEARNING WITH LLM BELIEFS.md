@@ -1,36 +1,11 @@
 # LLM UNLEARNING WITH LLM BELIEFS
 
 * 这篇文章指出传统 unlearning 会把概率质量挤到语义相近的改写答案上，造成伪遗忘；为了解决这个问题，他们引入 model beliefs，并同时压制 target response 和 beliefs，从而更彻底地忘掉目标内容。
-* 现有 LLM unlearning 方法虽然能压低目标答案概率，但常常只造成“伪遗忘”，因为概率质量会被挤到语义相近的高概率改写上。为了解决这个问题，作者提出利用模型自身的高置信生成（model beliefs）作为辅助遗忘目标，构建 bootstrapping unlearning 框架
-* LLM 会记住有害或敏感信息，因此需要通过 unlearning 直接从模型参数中移除这些知识；现有 unlearning 方法只是把“原答案”压下去，但知识并没有被真正移除，而是逃到高概率的改写表达中；引入 model beliefs：既然概率质量会被“挤”到模型自己最容易生成的高概率区域，
-那 unlearning 时就不能只压 target response，
-还要一起压制这些模型自己高置信生成的内容。
+  现有 LLM unlearning 方法虽然能压低目标答案概率，但常常只造成“伪遗忘”，因为概率质量会被挤到语义相近的高概率改写上。为了解决这个问题，作者提出利用模型自身的高置信生成（model beliefs）作为辅助遗忘目标，构建 bootstrapping unlearning 框架。
+  
+* 已有 unlearning 方法只压低“原目标答案”还不够，因为概率质量会被挤到语义相近的高概率替代表达上，这就是 squeezing effect（挤压效应）；所以作者提出要把模型自己当前“最相信”的内容（model beliefs）也一起拿来忘掉。基于这个想法，他们设计了两个方法：BS-T（token-level） 和 BS-S（sequence-level）。 
+更具体地说，先区分了两种“belief”：在 token 级别，模型在第 i个位置上的条件分布 πθ(⋅∣xu,y^u<i) 表示它的局部 belief；在 sequence 级别，从 πθ(⋅∣xu)采样出来、且平均对数似然较高的整个回答 y^u​ 表示它的全局 belief。BS-T 针对前者，BS-S 针对后者。
 
-
-
-model beliefs
-
-也就是模型当前最相信、最可能生成的 token 或 sequence。
-
-提出一个：
-
-bootstrapping (BS) framework
-
-意思是：
-
-利用模型自己生成出来的高置信内容
-
-把这些内容再反过来作为 unlearning 信号
-
-一起参与“遗忘”
-
-第一节里还提前概括了两个版本：
-
-BS-T：token level
-把 target token 和模型高概率 token 一起压制。
-
-BS-S：sequence level
-直接把模型生成的高置信完整序列也加入 forget set，一起删。
 
 ## Preliminaries: From Concepts to Practices 预备知识
 - 先把任务形式化：
@@ -125,9 +100,29 @@ NPO：把当前模型与原模型在 forget sample 上的概率做比值，实�
 
 WGA：进一步细化到 token 级别做加权，实现更细粒度的 unlearning。
 
-- 现有 unlearning 经常只是“表面忘记”，真正原因是压低目标答案后，概率质量被 softmax 挤到高概率的语义相近改写区域，因此模型仍会通过 paraphrase 泄漏知识。
--  belief-aware unlearning：不只忘原答案，还要忘模型会逃到的高置信改写区域；方法上通过 bootstrapping 把模型自己的高概率预测变成辅助 unlearning 信号。
+model beliefs
 
+也就是模型当前最相信、最可能生成的 token 或 sequence。
+
+提出一个：
+
+bootstrapping (BS) framework
+
+意思是：
+
+利用模型自己生成出来的高置信内容
+
+把这些内容再反过来作为 unlearning 信号
+
+一起参与“遗忘”
+
+第一节里还提前概括了两个版本：
+
+BS-T：token level
+把 target token 和模型高概率 token 一起压制。
+
+BS-S：sequence level
+直接把模型生成的高置信完整序列也加入 forget set，一起删。
 
 
 
