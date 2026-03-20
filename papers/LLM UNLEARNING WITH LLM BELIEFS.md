@@ -134,70 +134,72 @@ BS-S：sequence level
 
 
 
+
+
 ## 1. 局部 belief 的 top-k 集合
 
-公式：
+### 公式
 
-```text
-H_k^(i) = Top-k( pi_theta(. | x_u, y_u^<i) )
-````
+$$
+H_k^{(i)} = \operatorname{Top\text{-}k}\!\left( \pi_\theta(\cdot \mid x_u, y_u^{<i}) \right)
+$$
 
-字母含义：
+### 字母含义
 
-* `H_k^(i)`：第 `i` 个位置上的 top-k 高概率 token 集合
-* `k`：取前多少个高概率 token
-* `i`：当前 token 位置
-* `pi_theta(. | x_u, y_u^<i)`：模型在给定输入和前缀条件下，对下一个 token 的条件概率分布
-* `theta`：当前模型参数
-* `x_u`：forget prompt
-* `y_u^<i>`：目标序列在第 `i` 个位置之前的前缀
+- \(H_k^{(i)}\)：第 \(i\) 个位置上的 top-k 高概率 token 集合  
+- \(k\)：取前多少个高概率 token  
+- \(i\)：当前 token 位置  
+- \(\pi_\theta(\cdot \mid x_u, y_u^{<i})\)：模型在给定输入和前缀条件下，对下一个 token 的条件概率分布  
+- \(\theta\)：当前模型参数  
+- \(x_u\)：forget prompt  
+- \(y_u^{<i}\)：目标序列在第 \(i\) 个位置之前的前缀  
 
-关键解释：
+### 关键解释
 
-这个公式定义了当前位置的局部高概率区域。后续 token-level 的 bootstrapping 就是围绕这片高概率区域展开，而不是只盯住原始 target token。
+这个公式定义了当前位置的**局部高概率区域**。后续 token-level 的 bootstrapping，就是围绕这片高概率区域展开，而不是只盯住原始 target token。
 
 ---
 
 ## 2. 全局 belief 的序列采样
 
-公式：
+### 公式
 
-```text
-y_hat_u ~ pi_theta(. | x_u)
-```
+$$
+\hat{y}_u \sim \pi_\theta(\cdot \mid x_u)
+$$
 
-字母含义：
+### 字母含义
 
-* `y_hat_u`：模型基于 `x_u` 生成的一条高置信完整序列
-* `pi_theta(. | x_u)`：模型在输入 `x_u` 下，对所有可能输出序列的分布
-* `theta`：当前模型参数
-* `x_u`：forget prompt
-* `~`：表示“从该分布中采样得到”
+- \(\hat{y}_u\)：模型基于 \(x_u\) 生成的一条高置信完整序列  
+- \(\pi_\theta(\cdot \mid x_u)\)：模型在输入 \(x_u\) 下，对所有可能输出序列的分布  
+- \(\theta\)：当前模型参数  
+- \(x_u\)：forget prompt  
+- \(\sim\)：表示“从该分布中采样得到”  
 
-关键解释：
+### 关键解释
 
-这个公式定义了 sequence-level 的高置信回答。这些回答通常就是模型最可能生成的改写答案，后续会被加入辅助 forget set。
+这个公式定义了 sequence-level 的**高置信回答**。这些回答通常就是模型最可能生成的改写答案，后续会被加入辅助 forget set。
 
 ---
 
-## 3. restricted belief distribution
+## 3. Restricted belief distribution
 
-公式：
+### 公式
 
-```text
-q_u^(i) = Renorm over H_k^(i) of pi_theta(. | x_u, y_u^<i)
-```
+$$
+q_u^{(i)} = \operatorname{Renorm}_{H_k^{(i)}}\!\left( \pi_\theta(\cdot \mid x_u, y_u^{<i}) \right)
+$$
 
-字母含义：
+### 字母含义
 
-* `q_u^(i)`：第 `i` 个位置上，限制在 `H_k^(i)` 内并重新归一化后的 belief 分布
-* `H_k^(i)`：第 `i` 个位置上的 top-k 高概率 token 集合
-* `pi_theta(. | x_u, y_u^<i)`：原始 token 概率分布
-* `theta`：当前模型参数
-* `x_u`：forget prompt
-* `y_u^<i>`：当前位置之前的前缀
+- \(q_u^{(i)}\)：第 \(i\) 个位置上，限制在 \(H_k^{(i)}\) 内并重新归一化后的 belief 分布  
+- \(H_k^{(i)}\)：第 \(i\) 个位置上的 top-k 高概率 token 集合  
+- \(\pi_\theta(\cdot \mid x_u, y_u^{<i})\)：原始 token 概率分布  
+- \(\theta\)：当前模型参数  
+- \(x_u\)：forget prompt  
+- \(y_u^{<i}\)：当前位置之前的前缀  
 
-关键解释：
+### 关键解释
 
 这一步只是把“限制在 top-k 集合上并重新归一化后的分布”单独记成一个新符号，方便后面写公式。
 
@@ -205,28 +207,29 @@ q_u^(i) = Renorm over H_k^(i) of pi_theta(. | x_u, y_u^<i)
 
 ## 4. BS-T 的 soft target
 
-公式：
+### 公式
 
-```text
-t_u^(i) = lambda_BST * sg( q_u^(i) ) + (1 - lambda_BST) * e_(y_u^(i))
-```
+$$
+t_u^{(i)} = \lambda_{\mathrm{BST}} \cdot \operatorname{sg}\!\left( q_u^{(i)} \right)
++ \left(1 - \lambda_{\mathrm{BST}}\right) \cdot e_{y_u^{(i)}}
+$$
 
-字母含义：
+### 字母含义
 
-* `t_u^(i)`：第 `i` 个位置上的 soft unlearning target
-* `lambda_BST`：BS-T 的混合系数，用来控制 belief 分布所占权重
-* `sg(.)`：stop-gradient，表示这一项只作为目标使用，不让梯度反向传回去
-* `q_u^(i)`：限制在 top-k 区域上的 belief 分布
-* `e_(y_u^(i))`：目标 token `y_u^(i)` 的 one-hot 向量
-* `y_u^(i)`：forget target 序列在第 `i` 个位置上的 token
-* `i`：当前 token 位置
+- \(t_u^{(i)}\)：第 \(i\) 个位置上的 soft unlearning target  
+- \(\lambda_{\mathrm{BST}}\)：BS-T 的混合系数，用来控制 belief 分布所占权重  
+- \(\operatorname{sg}(\cdot)\)：stop-gradient，表示这一项只作为目标使用，不让梯度反向传回去  
+- \(q_u^{(i)}\)：限制在 top-k 区域上的 belief 分布  
+- \(e_{y_u^{(i)}}\)：目标 token \(y_u^{(i)}\) 的 one-hot 向量  
+- \(y_u^{(i)}\)：forget target 序列在第 \(i\) 个位置上的 token  
+- \(i\)：当前 token 位置  
 
-关键解释：
+### 关键解释
 
 这是 token-level bootstrapping 的核心。它把两部分混合成一个 soft target：
 
-1. 原始目标 token
-2. 模型当前最可能逃去的高概率 token 分布
+1. 原始目标 token  
+2. 模型当前最可能逃去的高概率 token 分布  
 
 这样做的目的，是把 forgetting pressure 从“压一个点”扩展成“压一片局部高概率区域”。
 
@@ -234,106 +237,114 @@ t_u^(i) = lambda_BST * sg( q_u^(i) ) + (1 - lambda_BST) * e_(y_u^(i))
 
 ## 5. BS-T 的 token-level loss
 
-公式：
+### 公式
 
-```text
-L_BST(theta; D_u)
-  = E over D_u [
-      sum over i = 1 to |y_u| of
-      < t_u^(i), log pi_theta(. | x_u, y_u^<i) >
-    ]
-```
+$$
+L_{\mathrm{BST}}(\theta; D_u)
+=
+\mathbb{E}_{(x_u, y_u)\sim D_u}
+\left[
+\sum_{i=1}^{|y_u|}
+\left\langle
+t_u^{(i)},\;
+\log \pi_\theta(\cdot \mid x_u, y_u^{<i})
+\right\rangle
+\right]
+$$
 
-字母含义：
+### 字母含义
 
-* `L_BST(theta; D_u)`：BS-T 在 forget set 上的总损失
-* `theta`：当前模型参数
-* `D_u`：forget set
-* `E over D_u[...]`：对 forget set 中所有样本求平均
-* `sum over i = 1 to |y_u|`：对目标序列中每个 token 位置求和
-* `|y_u|`：forget target 序列的长度
-* `t_u^(i)`：第 `i` 个位置上的 soft target
-* `log pi_theta(. | x_u, y_u^<i)`：当前位置整个词表上的 log 概率分布
-* `< a, b >`：向量内积
-* `x_u`：forget prompt
-* `y_u^<i>`：当前位置之前的前缀
+- \(L_{\mathrm{BST}}(\theta; D_u)\)：BS-T 在 forget set 上的总损失  
+- \(\theta\)：当前模型参数  
+- \(D_u\)：forget set  
+- \(\mathbb{E}_{(x_u, y_u)\sim D_u}[\cdot]\)：对 forget set 中所有样本求平均  
+- \(\sum_{i=1}^{|y_u|}\)：对目标序列中每个 token 位置求和  
+- \(|y_u|\)：forget target 序列的长度  
+- \(t_u^{(i)}\)：第 \(i\) 个位置上的 soft target  
+- \(\log \pi_\theta(\cdot \mid x_u, y_u^{<i})\)：当前位置整个词表上的 log 概率分布  
+- \(\langle a, b \rangle\)：向量内积  
+- \(x_u\)：forget prompt  
+- \(y_u^{<i}\)：当前位置之前的前缀  
 
-关键解释：
+### 关键解释
 
 这个损失函数在每个位置上都会同时压制：
 
-* 原始 target token
-* 高概率 belief token
+- 原始 target token  
+- 高概率 belief token  
 
-所以它实现的是 token-level 的 belief-aware unlearning。
+所以它实现的是 **token-level 的 belief-aware unlearning**。
 
 ---
 
 ## 6. BS-S 的辅助 forget set
 
-公式：
+### 公式
 
-```text
-D_hat_u = { (x_u, y_hat_u^(j)) },  j = 1 ... N
-```
+$$
+\hat{D}_u = \left\{ \left(x_u, \hat{y}_u^{(j)}\right) \right\}_{j=1}^{N}
+$$
 
-以及：
+以及
 
-```text
-y_hat_u^(j) ~ pi_theta(. | x_u)
-```
+$$
+\hat{y}_u^{(j)} \sim \pi_\theta(\cdot \mid x_u)
+$$
 
-字母含义：
+### 字母含义
 
-* `D_hat_u`：辅助 forget set
-* `(x_u, y_hat_u^(j))`：第 `j` 条辅助 forget 样本
-* `x_u`：forget prompt
-* `y_hat_u^(j)`：模型采样得到的第 `j` 条高置信回答
-* `j`：第几条采样序列
-* `N`：每个 forget prompt 采样出的 belief sequence 数量
-* `pi_theta(. | x_u)`：当前模型在 prompt `x_u` 下的输出分布
-* `theta`：当前模型参数
+- \(\hat{D}_u\)：辅助 forget set  
+- \((x_u, \hat{y}_u^{(j)})\)：第 \(j\) 条辅助 forget 样本  
+- \(x_u\)：forget prompt  
+- \(\hat{y}_u^{(j)}\)：模型采样得到的第 \(j\) 条高置信回答  
+- \(j\)：第几条采样序列  
+- \(N\)：每个 forget prompt 采样出的 belief sequence 数量  
+- \(\pi_\theta(\cdot \mid x_u)\)：当前模型在 prompt \(x_u\) 下的输出分布  
+- \(\theta\)：当前模型参数  
 
-关键解释：
+### 关键解释
 
-这一步的作用是构造 sequence-level 的 bootstrapped forget data。除了原始 forget answer，还把模型自己最可能生成的完整改写回答一并加入遗忘数据。
+这一步的作用是构造 **sequence-level 的 bootstrapped forget data**。除了原始 forget answer，还把模型自己最可能生成的完整改写回答一并加入遗忘数据。
 
 ---
 
 ## 7. BS-S 的总目标
 
-公式：
+### 公式
 
-```text
-L_BSS = (1 - lambda_BSS) * L(theta; D_u)
-      + lambda_BSS * L(theta; D_hat_u)
-```
+$$
+L_{\mathrm{BSS}}
+=
+\left(1 - \lambda_{\mathrm{BSS}}\right) \cdot L(\theta; D_u)
++
+\lambda_{\mathrm{BSS}} \cdot L(\theta; \hat{D}_u)
+$$
 
 如果写成优化目标，就是：
 
-```text
-min over theta of L_BSS
-```
+$$
+\min_{\theta} L_{\mathrm{BSS}}
+$$
 
-字母含义：
+### 字母含义
 
-* `L_BSS`：BS-S 的总损失
-* `lambda_BSS`：sequence-level bootstrapping 的混合系数
-* `L(theta; D_u)`：原始 forget set 上的 unlearning loss
-* `L(theta; D_hat_u)`：辅助 belief sequence forget set 上的 unlearning loss
-* `D_u`：原始 forget set
-* `D_hat_u`：模型生成的辅助 forget set
-* `L`：这里可以是任意 unlearning loss，比如 GA、BS-T 等
-* `theta`：当前模型参数
+- \(L_{\mathrm{BSS}}\)：BS-S 的总损失  
+- \(\lambda_{\mathrm{BSS}}\)：sequence-level bootstrapping 的混合系数  
+- \(L(\theta; D_u)\)：原始 forget set 上的 unlearning loss  
+- \(L(\theta; \hat{D}_u)\)：辅助 belief sequence forget set 上的 unlearning loss  
+- \(D_u\)：原始 forget set  
+- \(\hat{D}_u\)：模型生成的辅助 forget set  
+- \(L\)：这里可以是任意 unlearning loss，比如 GA、BS-T 等  
+- \(\theta\)：当前模型参数  
 
-关键解释：
+### 关键解释
 
 这个目标函数同时在两类数据上做遗忘：
 
-1. 原始 forget data
-2. 模型自己生成的高置信改写 answers
+1. 原始 forget data  
+2. 模型自己生成的高置信改写 answers  
 
-它解决的是 sequence-level 的逃逸问题，也就是模型虽然不输出原句，但仍可能输出整条语义接近的改写句。
+它解决的是 **sequence-level 的逃逸问题**，也就是模型虽然不输出原句，但仍可能输出整条语义接近的改写句。
 
 ---
 
@@ -341,64 +352,73 @@ min over theta of L_BSS
 
 ### 第一步：定位局部高概率区域
 
-```text
-H_k^(i) = Top-k( pi_theta(. | x_u, y_u^<i) )
-```
+$$
+H_k^{(i)} = \operatorname{Top\text{-}k}\!\left( \pi_\theta(\cdot \mid x_u, y_u^{<i}) \right)
+$$
 
-作用：找到当前位置最危险的高概率 token 邻域。
+**作用：** 找到当前位置最危险的高概率 token 邻域。
 
 ### 第二步：构造 restricted belief distribution
 
-```text
-q_u^(i) = Renorm over H_k^(i) of pi_theta(. | x_u, y_u^<i)
-```
+$$
+q_u^{(i)} = \operatorname{Renorm}_{H_k^{(i)}}\!\left( \pi_\theta(\cdot \mid x_u, y_u^{<i}) \right)
+$$
 
-作用：把局部高概率区域中的 token 分布单独提取出来。
+**作用：** 把局部高概率区域中的 token 分布单独提取出来。
 
 ### 第三步：构造 token-level soft target
 
-```text
-t_u^(i) = lambda_BST * sg( q_u^(i) ) + (1 - lambda_BST) * e_(y_u^(i))
-```
+$$
+t_u^{(i)} = \lambda_{\mathrm{BST}} \cdot \operatorname{sg}\!\left( q_u^{(i)} \right)
++ \left(1 - \lambda_{\mathrm{BST}}\right) \cdot e_{y_u^{(i)}}
+$$
 
-作用：把原始 target token 和高概率 belief token 混合。
+**作用：** 把原始 target token 和高概率 belief token 混合。
 
 ### 第四步：定义 token-level unlearning loss
 
-```text
-L_BST(theta; D_u)
-  = E over D_u [
-      sum over i = 1 to |y_u| of
-      < t_u^(i), log pi_theta(. | x_u, y_u^<i) >
-    ]
-```
+$$
+L_{\mathrm{BST}}(\theta; D_u)
+=
+\mathbb{E}_{(x_u, y_u)\sim D_u}
+\left[
+\sum_{i=1}^{|y_u|}
+\left\langle
+t_u^{(i)},\;
+\log \pi_\theta(\cdot \mid x_u, y_u^{<i})
+\right\rangle
+\right]
+$$
 
-作用：同时压制 target token 和局部 belief token。
+**作用：** 同时压制 target token 和局部 belief token。
 
 ### 第五步：采样高置信整句
 
-```text
-y_hat_u^(j) ~ pi_theta(. | x_u)
-```
+$$
+\hat{y}_u^{(j)} \sim \pi_\theta(\cdot \mid x_u)
+$$
 
-作用：找出模型最可能输出的完整改写答案。
+**作用：** 找出模型最可能输出的完整改写答案。
 
 ### 第六步：构造辅助 forget set
 
-```text
-D_hat_u = { (x_u, y_hat_u^(j)) },  j = 1 ... N
-```
+$$
+\hat{D}_u = \left\{ \left(x_u, \hat{y}_u^{(j)}\right) \right\}_{j=1}^{N}
+$$
 
-作用：把这些高置信改写回答加入遗忘数据。
+**作用：** 把这些高置信改写回答加入遗忘数据。
 
 ### 第七步：定义 sequence-level 总目标
 
-```text
-L_BSS = (1 - lambda_BSS) * L(theta; D_u)
-      + lambda_BSS * L(theta; D_hat_u)
-```
+$$
+L_{\mathrm{BSS}}
+=
+\left(1 - \lambda_{\mathrm{BSS}}\right) \cdot L(\theta; D_u)
++
+\lambda_{\mathrm{BSS}} \cdot L(\theta; \hat{D}_u)
+$$
 
-作用：同时删除原始答案和模型自己最可能生成的整条改写答案。
+**作用：** 同时删除原始答案和模型自己最可能生成的整条改写答案。
 
 ---
 
@@ -406,9 +426,10 @@ L_BSS = (1 - lambda_BSS) * L(theta; D_u)
 
 第四节的方法核心是：
 
-* token level：通过 BS-T 压制原始 target token 以及其周围的高概率 belief token
-* sequence level：通过 BS-S 压制原始 target sequence 以及模型自己最可能生成的高置信改写 sequence
+- **token level：** 通过 BS-T 压制原始 target token 以及其周围的高概率 belief token  
+- **sequence level：** 通过 BS-S 压制原始 target sequence 以及模型自己最可能生成的高置信改写 sequence  
 
 最终目标不是只让模型“不输出原句”，而是让模型连“最可能换着说出来的那些答案”也一起忘掉。
+``
 
 
