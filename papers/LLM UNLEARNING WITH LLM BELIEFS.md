@@ -136,12 +136,13 @@ BS-S：sequence level
 
 
 
+
 ## 1. 局部 belief 的 top-k 集合
 
 ### 公式
 
 $$
-H_k^{(i)} = \operatorname{Top\text{-}k}\!\left( \pi_\theta(\cdot \mid x_u, y_u^{<i}) \right)
+H_k^{(i)} = \text{Top-k}\big( \pi_\theta(\cdot \mid x_u, y_u^{<i}) \big)
 $$
 
 ### 字母含义
@@ -187,7 +188,7 @@ $$
 ### 公式
 
 $$
-q_u^{(i)} = \operatorname{Renorm}_{H_k^{(i)}}\!\left( \pi_\theta(\cdot \mid x_u, y_u^{<i}) \right)
+q_u^{(i)} = \text{Renorm over } H_k^{(i)} \text{ of } \pi_\theta(\cdot \mid x_u, y_u^{<i})
 $$
 
 ### 字母含义
@@ -210,15 +211,14 @@ $$
 ### 公式
 
 $$
-t_u^{(i)} = \lambda_{\mathrm{BST}} \cdot \operatorname{sg}\!\left( q_u^{(i)} \right)
-+ \left(1 - \lambda_{\mathrm{BST}}\right) \cdot e_{y_u^{(i)}}
+t_u^{(i)} = \lambda_{\mathrm{BST}} \cdot \mathrm{sg}(q_u^{(i)}) + (1 - \lambda_{\mathrm{BST}}) \cdot e_{y_u^{(i)}}
 $$
 
 ### 字母含义
 
 - \(t_u^{(i)}\)：第 \(i\) 个位置上的 soft unlearning target  
 - \(\lambda_{\mathrm{BST}}\)：BS-T 的混合系数，用来控制 belief 分布所占权重  
-- \(\operatorname{sg}(\cdot)\)：stop-gradient，表示这一项只作为目标使用，不让梯度反向传回去  
+- \(\mathrm{sg}(\cdot)\)：stop-gradient，表示这一项只作为目标使用，不让梯度反向传回去  
 - \(q_u^{(i)}\)：限制在 top-k 区域上的 belief 分布  
 - \(e_{y_u^{(i)}}\)：目标 token \(y_u^{(i)}\) 的 one-hot 向量  
 - \(y_u^{(i)}\)：forget target 序列在第 \(i\) 个位置上的 token  
@@ -242,13 +242,13 @@ $$
 $$
 L_{\mathrm{BST}}(\theta; D_u)
 =
-\mathbb{E}_{(x_u, y_u)\sim D_u}
+\mathbb{E}_{(x_u, y_u) \sim D_u}
 \left[
 \sum_{i=1}^{|y_u|}
-\left\langle
-t_u^{(i)},\;
+\langle
+t_u^{(i)},
 \log \pi_\theta(\cdot \mid x_u, y_u^{<i})
-\right\rangle
+\rangle
 \right]
 $$
 
@@ -257,7 +257,7 @@ $$
 - \(L_{\mathrm{BST}}(\theta; D_u)\)：BS-T 在 forget set 上的总损失  
 - \(\theta\)：当前模型参数  
 - \(D_u\)：forget set  
-- \(\mathbb{E}_{(x_u, y_u)\sim D_u}[\cdot]\)：对 forget set 中所有样本求平均  
+- \(\mathbb{E}_{(x_u, y_u) \sim D_u}[\cdot]\)：对 forget set 中所有样本求平均  
 - \(\sum_{i=1}^{|y_u|}\)：对目标序列中每个 token 位置求和  
 - \(|y_u|\)：forget target 序列的长度  
 - \(t_u^{(i)}\)：第 \(i\) 个位置上的 soft target  
@@ -282,7 +282,7 @@ $$
 ### 公式
 
 $$
-\hat{D}_u = \left\{ \left(x_u, \hat{y}_u^{(j)}\right) \right\}_{j=1}^{N}
+\hat{D}_u = \{ (x_u, \hat{y}_u^{(j)}) \mid j = 1, \dots, N \}
 $$
 
 以及
@@ -315,7 +315,7 @@ $$
 $$
 L_{\mathrm{BSS}}
 =
-\left(1 - \lambda_{\mathrm{BSS}}\right) \cdot L(\theta; D_u)
+(1 - \lambda_{\mathrm{BSS}}) \cdot L(\theta; D_u)
 +
 \lambda_{\mathrm{BSS}} \cdot L(\theta; \hat{D}_u)
 $$
@@ -353,7 +353,7 @@ $$
 ### 第一步：定位局部高概率区域
 
 $$
-H_k^{(i)} = \operatorname{Top\text{-}k}\!\left( \pi_\theta(\cdot \mid x_u, y_u^{<i}) \right)
+H_k^{(i)} = \text{Top-k}\big( \pi_\theta(\cdot \mid x_u, y_u^{<i}) \big)
 $$
 
 **作用：** 找到当前位置最危险的高概率 token 邻域。
@@ -361,7 +361,7 @@ $$
 ### 第二步：构造 restricted belief distribution
 
 $$
-q_u^{(i)} = \operatorname{Renorm}_{H_k^{(i)}}\!\left( \pi_\theta(\cdot \mid x_u, y_u^{<i}) \right)
+q_u^{(i)} = \text{Renorm over } H_k^{(i)} \text{ of } \pi_\theta(\cdot \mid x_u, y_u^{<i})
 $$
 
 **作用：** 把局部高概率区域中的 token 分布单独提取出来。
@@ -369,8 +369,7 @@ $$
 ### 第三步：构造 token-level soft target
 
 $$
-t_u^{(i)} = \lambda_{\mathrm{BST}} \cdot \operatorname{sg}\!\left( q_u^{(i)} \right)
-+ \left(1 - \lambda_{\mathrm{BST}}\right) \cdot e_{y_u^{(i)}}
+t_u^{(i)} = \lambda_{\mathrm{BST}} \cdot \mathrm{sg}(q_u^{(i)}) + (1 - \lambda_{\mathrm{BST}}) \cdot e_{y_u^{(i)}}
 $$
 
 **作用：** 把原始 target token 和高概率 belief token 混合。
@@ -380,13 +379,13 @@ $$
 $$
 L_{\mathrm{BST}}(\theta; D_u)
 =
-\mathbb{E}_{(x_u, y_u)\sim D_u}
+\mathbb{E}_{(x_u, y_u) \sim D_u}
 \left[
 \sum_{i=1}^{|y_u|}
-\left\langle
-t_u^{(i)},\;
+\langle
+t_u^{(i)},
 \log \pi_\theta(\cdot \mid x_u, y_u^{<i})
-\right\rangle
+\rangle
 \right]
 $$
 
@@ -403,7 +402,7 @@ $$
 ### 第六步：构造辅助 forget set
 
 $$
-\hat{D}_u = \left\{ \left(x_u, \hat{y}_u^{(j)}\right) \right\}_{j=1}^{N}
+\hat{D}_u = \{ (x_u, \hat{y}_u^{(j)}) \mid j = 1, \dots, N \}
 $$
 
 **作用：** 把这些高置信改写回答加入遗忘数据。
@@ -413,7 +412,7 @@ $$
 $$
 L_{\mathrm{BSS}}
 =
-\left(1 - \lambda_{\mathrm{BSS}}\right) \cdot L(\theta; D_u)
+(1 - \lambda_{\mathrm{BSS}}) \cdot L(\theta; D_u)
 +
 \lambda_{\mathrm{BSS}} \cdot L(\theta; \hat{D}_u)
 $$
@@ -430,6 +429,3 @@ $$
 - **sequence level：** 通过 BS-S 压制原始 target sequence 以及模型自己最可能生成的高置信改写 sequence  
 
 最终目标不是只让模型“不输出原句”，而是让模型连“最可能换着说出来的那些答案”也一起忘掉。
-``
-
-
