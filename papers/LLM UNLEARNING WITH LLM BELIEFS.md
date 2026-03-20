@@ -76,17 +76,17 @@ Dr：retain set，要保留行为的数据
 
 yi：response 第 
 𝑖
-i 个 token
+ 个 token
 
 y<i：第 
 𝑖
-i 个 token 之前的前缀
+ 个 token 之前的前缀
 
 πθ(y|x)：整个序列 
 𝑦
-y 在 prompt 
+ 在 prompt 
 𝑥
-x 下的概率。
+ 下的概率。
 
 - 义 1：单个 token 的条件概率
 
