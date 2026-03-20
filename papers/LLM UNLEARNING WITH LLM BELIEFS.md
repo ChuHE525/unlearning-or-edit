@@ -217,22 +217,12 @@ t_u^{(i)} =
 
 ---
 
-## 5. BS-T 的 token-level loss
+## 4. BS-T 的 token-level loss
 
 ### 公式
 
-```math
-L_{\mathrm{BST}}(\theta; D_u)
-=
-\mathbb{E}_{(x_u, y_u)\sim D_u}
-\left[
-\sum_{i=1}^{|y_u|}
-\langle
-t_u^{(i)},
-\log \pi_\theta(\cdot \mid x_u, y_u^{<i})
-\rangle
-\right]
-```
+<img width="608" height="108" alt="image" src="https://github.com/user-attachments/assets/5318e217-c503-4254-891a-2c7b281583f0" />
+
 
 ### 字母含义
 
@@ -249,17 +239,17 @@ t_u^{(i)},
 - \(y_u^{<i}\)：当前位置之前的前缀  
 
 ### 关键解释
-
+- 本质是一个 soft-label 的 token-level 目标,把 token-level 的 forgetting 从“单点压制”变成“局部邻域压制。
 这个损失函数在每个位置上都会同时压制：
 
 - 原始 target token  
 - 高概率 belief token  
 
-所以它实现的是 token-level 的 belief-aware unlearning。
+所以它实现的是 token-level 的 belief-aware unlearning,BS-T 会把 forgetting signal 分散到原始 target 和它的 top-k alternatives 上，从而在 token level 直接对抗 squeezing effect
 
 ---
 
-## 6. BS-S 的辅助 forget set
+## 5. BS-S 的辅助 forget set
 
 ### 公式
 
