@@ -327,16 +327,9 @@ L_{\mathrm{BSS}}
 
 ### 第二步：构造 restricted belief distribution
 
-```math
-q_u^{(i)}(v)
-=
-\frac{
-\pi_\theta(v \mid x_u, y_u^{<i})
-}{
-\sum_{v' \in H_k^{(i)}} \pi_\theta(v' \mid x_u, y_u^{<i})
-}
-\quad \text{for } v \in H_k^{(i)}
-```
+<img width="607" height="93" alt="image" src="https://github.com/user-attachments/assets/208060e9-de09-4b4f-9ed6-4e205ef22345" />
+
+
 
 **作用：** 把局部高概率区域中的 token 分布单独提取出来。
 
@@ -353,18 +346,8 @@ t_u^{(i)} =
 
 ### 第四步：定义 token-level unlearning loss
 
-```math
-L_{\mathrm{BST}}(\theta; D_u)
-=
-\mathbb{E}_{(x_u, y_u)\sim D_u}
-\left[
-\sum_{i=1}^{|y_u|}
-\langle
-t_u^{(i)},
-\log \pi_\theta(\cdot \mid x_u, y_u^{<i})
-\rangle
-\right]
-```
+<img width="673" height="99" alt="image" src="https://github.com/user-attachments/assets/c5c03c8f-978c-446b-9f6c-6e2030ed5400" />
+
 
 **作用：** 同时压制 target token 和局部 belief token。
 
