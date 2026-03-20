@@ -127,13 +127,13 @@ BS-S：sequence level
 
 
 
-
+### 旧方法只压原始 target，会让概率质量逃到模型自己本来就更相信的高概率改写区域；所以新方法不只要压原答案，还要压模型自己的高置信 beliefs，把它具体化成两个方法：BS-T 和 BS-S。
 
 ## 1. 局部 belief 的 top-k 集合
 
 ### 公式
 
-<img width="293" height="51" alt="image" src="https://github.com/user-attachments/assets/4ed5e7f1-411e-48ef-837b-ff0e59667eee" />
+<img width="342" height="63" alt="image" src="https://github.com/user-attachments/assets/46046d7e-41a0-4b5f-94c0-98942aa67cb1" />
 
 
 ### 字母含义
@@ -142,7 +142,7 @@ BS-S：sequence level
 - \(k\)：取前多少个高概率 token  
 - \(i\)：当前 token 位置  
 - \(\pi_\theta(\cdot \mid x_u, y_u^{<i})\)：模型在给定输入和前缀条件下，对下一个 token 的条件概率分布  
-- \(\theta\)：当前模型参数  
+- 𝜃：当前模型参数  
 - \(x_u\)：forget prompt  
 - \(y_u^{<i}\)：目标序列在第 \(i\) 个位置之前的前缀  
 
@@ -150,6 +150,7 @@ BS-S：sequence level
 
 这个公式定义了当前位置的局部高概率区域。后续 token-level 的 bootstrapping，就是围绕这片高概率区域展开，而不是只盯住原始 target token。
 
+把原始 target token 压下去时，概率质量最可能流向的，就是这批 top-k 高概率 token
 ---
 
 ## 2. 全局 belief 的序列采样
@@ -164,13 +165,19 @@ BS-S：sequence level
 
 - \(\hat{y}_u\)：模型基于 \(x_u\) 生成的一条高置信完整序列  
 - \(\pi_\theta(\cdot \mid x_u)\)：模型在输入 \(x_u\) 下，对所有可能输出序列的分布  
-- \(\theta\)：当前模型参数  
+- θ：当前模型参数  
 - \(x_u\)：forget prompt  
-- \(\sim\)：表示“从该分布中采样得到”  
+- ∼：表示“从该分布中采样得到”  
 
 ### 关键解释
 
-这个公式定义了 sequence-level 的高置信回答。这些回答通常就是模型最可能生成的改写答案，后续会被加入辅助 forget set。
+这个公式定义了 sequence-level 的高置信回答。这些回答通常就是模型最可能生成的改写答案，后续会被加入辅助 forget set，不只是“下一个词”会逃，整条回答也会逃。模型很可能不再说原句，但会说一条高置信的完整改写句。
+
+- token 级别有高概率邻域 𝐻𝑘(𝑖)
+
+- sequence 级别有高置信整句 𝑦^u
+
+- 要真正 unlearn，就不能只压 label token，而要把这两种 beliefs 一起纳入目标
 
 ---
 
