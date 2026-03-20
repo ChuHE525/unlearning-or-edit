@@ -133,9 +133,8 @@ BS-S：sequence level
 
 ### 公式
 
-```math
-H_k^{(i)} = \mathrm{TopK}(\pi_\theta(\cdot \mid x_u, y_u^{<i}))
-```
+<img width="293" height="51" alt="image" src="https://github.com/user-attachments/assets/4ed5e7f1-411e-48ef-837b-ff0e59667eee" />
+
 
 ### 字母含义
 
