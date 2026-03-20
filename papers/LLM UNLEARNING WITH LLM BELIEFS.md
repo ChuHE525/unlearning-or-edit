@@ -383,7 +383,7 @@ L_{\mathrm{BSS}}
 
 ## 9. 总结
 
-第四节的方法核心是：
+方法核心是：
 
 - **token level：** 通过 BS-T 压制原始 target token 以及其周围的高概率 belief token  
 - **sequence level：** 通过 BS-S 压制原始 target sequence 以及模型自己最可能生成的高置信改写 sequence  
