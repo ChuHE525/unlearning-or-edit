@@ -36,17 +36,9 @@ $$
 
 ### 1.审计者的最优攻击
 
-\documentclass{article}
-\usepackage{amsmath,amssymb} % 必备数学公式包
-\begin{document}
-
-% 核心公式
-\[
-U_a(\theta_a, \theta_u) = M\left(\widetilde{D}_{\text{val}}^{\theta_u}; \theta_a\right) 
-\quad \text{其中} \quad 
+$$
+U_a(\theta_a, \theta_u) = M\left(\widetilde{D}_{\text{val}}^{\theta_u}; \theta_a\right)
+\quad \text{其中} \quad
 \theta_a \in \mathcal{H}_{\theta_u} = \mathop{\arg\max}_{\theta_a' \in \mathcal{H}_a} M\left(\widetilde{D}_{\text{tr}}^{\theta_u}; \theta_a'\right)
-\]
-
-\end{document}
-
+$$
 
