@@ -20,9 +20,9 @@ Unlearner 先改模型，Auditor 再用最强的 membership inference 去查；u
 
 对于 unlearned model $\theta_u$，定义其 auditing set 为
 
-$$
-\tilde{D}_{\theta_u} = \left\{ (s_j^f, 1), (s_j^{te}, 0) \right\}_{j=1}^q
-$$
+![9aacf240-4cc4-43ef-acf8-840f7c7d940b](https://github.com/user-attachments/assets/70f7d77a-b887-4537-987f-fa5631fad665)
+
+
 
 其中
 $$
