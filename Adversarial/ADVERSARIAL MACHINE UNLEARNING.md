@@ -201,6 +201,7 @@ $$
 #### 攻击者最优解的隐式表达（KKT 条件）
 
 攻击者最优解 $\theta_a$ 往往没有显式公式，不能直接写成：
+
 $$
 \theta_a = g\left(\widetilde{D}_{\theta_u}^{\text{tr}}\right)
 $$
