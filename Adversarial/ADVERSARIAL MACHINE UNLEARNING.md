@@ -1,5 +1,5 @@
 # ADVERSARIAL MACHINE UNLEARNING
-
+模型删数据后，到底删干净没有
 Unlearner 先改模型，Auditor 再用最强的 membership inference 去查；unlearner 的目标就是既保住 retain/test 性能，又让 auditor 查不出来。
  
 “对抗式机器遗忘”框架：把遗忘者和审计者建成一个双层优化问题，遗忘者既要保留模型效用，又要让成员推理攻击无法区分 forget set 与普通测试样本；为此，
