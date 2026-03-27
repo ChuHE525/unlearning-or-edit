@@ -51,7 +51,7 @@ $$
 
 $$
 U_a(\theta_a, \theta_u) = M\left(\widetilde{D}_{\text{val}}^{\theta_u}; \theta_a\right)
-\quad \text{其中} \quad
+\quad \text{where} \quad
 \theta_a \in \mathcal{H}_{\theta_u} = \mathop{\arg\max}_{\theta_a' \in \mathcal{H}_a} M\left(\widetilde{D}_{\text{tr}}^{\theta_u}; \theta_a'\right)
 $$
 
