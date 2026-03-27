@@ -20,19 +20,26 @@ Unlearner 先改模型，Auditor 再用最强的 membership inference 去查；u
 
 对于 unlearned model $\theta_u$，定义其 auditing set 为
 
-
-
-<img width="534" height="111" alt="image" src="https://github.com/user-attachments/assets/df391ce5-9d56-465b-a80f-6a0d9d954d39" />
+\tilde{D}_{\theta_u} = \left\{ (s_j^f, 1), (s_j^{te}, 0) \right\}_{j=1}^q
 
 其中
-
 $$
 s_j^f = S_{\theta_u}(x_j^f), 
 \qquad
 s_j^{te} = S_{\theta_u}(x_j^{te}).
 $$
+#### 符号说明
+- $\tilde{D}_{\theta_u}$: 针对 unlearned model $\theta_u$ 构造的审计数据集
+- $S_{\theta_u}(x)$: 模型 $\theta_u$ 对输入 $x$ 的输出
+- $s_j^f$: forget 样本经过 $\theta_u$ 后的输出
+- $s_j^{te}$: test 样本经过 $\theta_u$ 后的输出
+- 上标 $te$: test
+- 标签 1: member 类，代表 forget 样本
+- 标签 0: non-member 类，代表 test 样本
 
-<img width="946" height="602" alt="image" src="https://github.com/user-attachments/assets/965eb80d-eda4-4741-a055-3e4f166282de" />
+这里的输出 $s$ 可以是：
+- 单个标量，比如每个样本的 cross-entropy loss
+- 也可以是整条类别概率向量
 
 ### 1.审计者的最优攻击
 
