@@ -24,12 +24,7 @@ Unlearner 先改模型，Auditor 再用最强的 membership inference 去查；u
 
 
 
-其中
-$$
-s_j^f = S_{\theta_u}(x_j^f), 
-\qquad
-s_j^{te} = S_{\theta_u}(x_j^{te}).
-$$
+其中：$$s_j^f = S_{\theta_u}(x_j^f), \qquads_j^{te} = S_{\theta_u}(x_j^{te})$$
 #### 符号说明
 - $\tilde{D}_{\theta_u}$: 针对 unlearned model $\theta_u$ 构造的审计数据集
 - $S_{\theta_u}(x)$: 模型 $\theta_u$ 对输入 $x$ 的输出
