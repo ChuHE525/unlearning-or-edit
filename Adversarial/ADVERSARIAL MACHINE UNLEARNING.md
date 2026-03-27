@@ -19,6 +19,7 @@ Unlearner 先改模型，Auditor 再用最强的 membership inference 去查；u
 ## Auditing Set 的定义
 
 对于 unlearned model $\theta_u$，定义其 auditing set 为
+
 <img width="534" height="111" alt="image" src="https://github.com/user-attachments/assets/df391ce5-9d56-465b-a80f-6a0d9d954d39" />
 
 其中
