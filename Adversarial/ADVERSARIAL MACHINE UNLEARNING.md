@@ -54,4 +54,36 @@ U_a(\theta_a, \theta_u) = M\left(\widetilde{D}_{\text{val}}^{\theta_u}; \theta_a
 \quad \text{where} \quad
 \theta_a \in \mathcal{H}_{\theta_u} = \mathop{\arg\max}_{\theta_a' \in \mathcal{H}_a} M\left(\widetilde{D}_{\text{tr}}^{\theta_u}; \theta_a'\right)
 $$
+### 2.unlearner 的目标函数
+
+$$
+C_u(\theta_u, \theta_a) = L(D_r; \theta_u) + \alpha \cdot M\left(\widetilde{D}_{\text{val}}^{\theta_u}; \theta_a\right)
+$$
+
+### 3. 双层优化 / Stackelberg Game
+
+$$
+\mathop{\arg\min}_{\theta_u \in \mathcal{H}_u} L(D_r; \theta_u) + \alpha \cdot M\left(\widetilde{D}_{\theta_u}^{val}; \theta_a\right)
+\quad \text{s.t.} \quad
+\theta_a \in \mathcal{B}_{\theta_u}
+$$
+
+
+### 4. 对 unlearner 目标求梯度
+
+$$
+\frac{\partial C_u}{\partial \theta_u} = \frac{\partial L(D_r; \theta_u)}{\partial \theta_u} + \frac{\partial M\left(\widetilde{D}_{\theta_u}^{val}; \theta_a\right)}{\partial \theta_a} \cdot \frac{\partial \theta_a}{\partial \widetilde{D}_{\theta_u}^{tr}} \cdot \frac{\partial \widetilde{D}_{\theta_u}^{tr}}{\partial \theta_u}
+$$
+
+### 5.把攻击者最优解写成隐式方程
+
+$$
+f\left(\tilde{D}_{\theta_u}^{tr}, \theta_a\right) = 0
+$$
+
+### 6.用隐函数定理做反传
+
+$$
+\frac{\partial \theta_a}{\partial \tilde{D}_{\theta_u}^{tr}} = -\left( \frac{\partial f(\tilde{D}_{\theta_u}^{tr}, \theta_a)}{\partial \tilde{D}_{\theta_u}^{tr}} \right)^{-1} \frac{\partial f(\tilde{D}_{\theta_u}^{tr}, \theta_a)}{\partial \theta_a}
+$$
 
