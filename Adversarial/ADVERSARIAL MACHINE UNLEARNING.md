@@ -24,10 +24,10 @@ Unlearner 先改模型，Auditor 再用最强的 membership inference 去查；u
 
 
 $$
-17s_j^f = S_{\theta_u}(x_j^f), 
-18\qquad
-19s_j^{te} = S_{\theta_u}(x_j^{te})
-20$$
+s_j^f = S_{\theta_u}(x_j^f), 
+\qquad
+s_j^{te} = S_{\theta_u}(x_j^{te})
+$$
 
 
 #### 符号说明
