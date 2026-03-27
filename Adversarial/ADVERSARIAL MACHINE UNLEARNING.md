@@ -33,5 +33,7 @@ s_j^{te} = S_{\theta_u}(x_j^{te}).
 $$
 
 <img width="946" height="602" alt="image" src="https://github.com/user-attachments/assets/965eb80d-eda4-4741-a055-3e4f166282de" />
+### 1审计者的最优攻击
+$U_a(\theta_a, \theta_u) = M\left(\widetilde{D}_{\text{val}}^{\theta_u}; \theta_a\right)$ 其中 $\theta_a \in \mathcal{H}_{\theta_u} = \mathop{\arg\max}_{\theta_a' \in \mathcal{H}_a} M\left(\widetilde{D}_{\text{tr}}^{\theta_u}; \theta_a'\right)$
 
 
