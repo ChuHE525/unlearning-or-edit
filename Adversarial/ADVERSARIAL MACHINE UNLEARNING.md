@@ -18,7 +18,9 @@ Unlearner 先改模型，Auditor 再用最强的 membership inference 去查；u
 
 ## Auditing Set 的定义
 
-对于 unlearned model $\theta_u$，定义其 auditing set 为$$
+对于 unlearned model $\theta_u$，定义其 auditing set 为
+
+$$
 \tilde{D}_{\theta_u} = \left\{ (s_j^f, 1), (s_j^{te}, 0) \right\}_{j=1}^q
 $$
 
