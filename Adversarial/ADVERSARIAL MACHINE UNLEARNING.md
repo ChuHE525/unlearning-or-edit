@@ -57,17 +57,21 @@ $$
 
 
 #### 第一层：审计者效用函数
+
 $$
 U_a(\theta_a, \theta_u) = M\left(\widetilde{D}_{\text{val}}^{\theta_u}; \theta_a\right)
 $$
+
 表示审计者的效用 $U_a$，就是攻击模型 $\theta_a$ 在审计验证集上的表现。
 
 ---
 
 #### 第二层：审计者最佳响应
+
 $$
 \theta_a \in \mathcal{B}_{\theta_u} = \mathop{\arg\max}_{\theta_a' \in \mathcal{H}_a} M\left(\widetilde{D}_{\text{tr}}^{\theta_u}; \theta_a'\right)
 $$
+
 表示审计者不会随便选一个攻击器，而是会从所有可选攻击器里，挑一个最强的 best response。
 
 ---
@@ -101,9 +105,11 @@ $$
 表示模型在 retain set 上的损失。它的作用是：别把该记住的数据也搞坏了。
 
 #### 第二项：审计攻击约束项
+
 $$
 \alpha \cdot M\left(\widetilde{D}_{\theta_u}^{\text{val}}; \theta_a\right)
 $$
+
 表示审计者攻击成功的程度。因为 unlearner 在最小化这个式子，所以它希望这个值越小越好，也就是让攻击者越难分辨 forget/test 越好。
 
 ---
@@ -154,10 +160,13 @@ $$
 $$
 \frac{\partial C_u}{\partial \theta_u} = \frac{\partial L(D_r; \theta_u)}{\partial \theta_u} + \frac{\partial M\left(\widetilde{D}_{\theta_u}^{val}; \theta_a\right)}{\partial \theta_a} \cdot \frac{\partial \theta_a}{\partial \widetilde{D}_{\theta_u}^{tr}} \cdot \frac{\partial \widetilde{D}_{\theta_u}^{tr}}{\partial \theta_u}
 $$
+
 #### 第一项
+
 $$
 \frac{\partial L(D_r; \theta_u)}{\partial \theta_u}
 $$
+
 就是普通训练里的梯度，保证 retain set 性能。
 
 #### 第二项（关键）
@@ -165,6 +174,7 @@ $$
 $\theta_u$ 改了，会改变审计集；审计集改了，会改变最优攻击器 $\theta_a$；攻击器改了，会改变审计指标 $M$。
 
 所以这是一条链式传导：
+
 $$
 \theta_u \longrightarrow \widetilde{D}_{\theta_u}^{\text{tr}} \longrightarrow \theta_a \longrightarrow M
 $$
@@ -218,6 +228,7 @@ $$
 $$
 \frac{\partial \theta_a}{\partial \tilde{D}_{\theta_u}^{tr}} = -\left( \frac{\partial f(\tilde{D}_{\theta_u}^{tr}, \theta_a)}{\partial \tilde{D}_{\theta_u}^{tr}} \right)^{-1} \frac{\partial f(\tilde{D}_{\theta_u}^{tr}, \theta_a)}{\partial \theta_a}
 $$
+
 可以通过对 KKT 系统做隐式求导，得到**攻击器最优解怎样随审计集变化**。这是双层优化梯度推导中最核心、难度最高的部分。
 
 ---
