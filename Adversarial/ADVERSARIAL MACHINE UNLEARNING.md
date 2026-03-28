@@ -105,8 +105,10 @@ $$
 $$
 \alpha \cdot M\left(\widetilde{D}_{\theta_u}^{\text{val}}; \theta_a\right)
 $$
-
-表示审计者攻击成功的程度。因为 unlearner 在最小化这个式子，所以它希望这个值越小越好，也就是让攻击者越难分辨 forget/test 越好。
+- 表示auditor 的攻击效果
+- 第一，别把该记住的数据搞坏，所以 retain loss 要小；
+第二，让攻击者查不出来，所以 auditor 的区分能力也要小。
+𝛼 就是其中的权衡系数。
 
 ---
 
