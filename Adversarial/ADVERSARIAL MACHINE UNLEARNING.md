@@ -1,20 +1,11 @@
 # ADVERSARIAL MACHINE UNLEARNING
-模型删数据后，到底删干净没有
-Unlearner 先改模型，Auditor 再用最强的 membership inference 去查；unlearner 的目标就是既保住 retain/test 性能，又让 auditor 查不出来。
- 
-“对抗式机器遗忘”框架：把遗忘者和审计者建成一个双层优化问题，遗忘者既要保留模型效用，又要让成员推理攻击无法区分 forget set 与普通测试样本；为此，
- 直接从原始模型 $\theta_o$ 出发，得到一个“被遗忘后的模型” $\theta_u$。
-
-如何判断 $\theta_u$ 是否真的忘掉了 $D_f$？
-
-答：让一个审计者用成员推理攻击来区分遗忘集 $D_f$ 和测试集。如果区分不出来，说明遗忘集在模型中的痕迹已经很弱，遗忘更可信。
-
-{``遗忘成功'' = ``攻击者无法从模型输出中看出这些样本曾被训练过''}
+模型删数据后，到底删干净没有。
+- Unlearner 先改模型，Auditor 再用最强的 membership inference 去查；unlearner 的目标就是既保住 retain/test 性能，又让 auditor 查不出来。
 
 **MIA** 
+- 训练过的样本，模型通常更熟悉，它们在模型输出上往往和没见过的样本不一样。比如更高置信度、更低 loss
+- MIA 在这里被改造成区分 forget outputs 与 test outputs 的二分类任务，不再问‘它是不是 member’，而是问‘forget 样本的输出还像不像 member’。如果还像，说明没忘干净；如果已经和 test 样本差不多，就说明残迹变弱了。
 
-找forget set 的痕迹还在不在模型里
-如果 forget 样本和 test 样本的输出分布还明显不同，攻击者就能区分；如果区分不了，就说明 forget 的痕迹被抹平了。
 
 ## Auditing Set 的定义
 
@@ -45,7 +36,11 @@ $$
 
 这里的输出 $s$ 可以是：
 - 单个标量，比如每个样本的 cross-entropy loss
-- 也可以是整条类别概率向量
+- 也可以是整条类别概率向量，
+- forget 样本经过模型后的输出，记成 1；test 样本经过模型后的输出，记成 0。变成一个二分类任务：只看模型输出，判断这条输出更像 forget 还是更像 test
+- 输入给 auditor 的是模型输出，
+标 1 / 标 0 是为了训练一个区分器，
+这本质上是把“是否还有残迹”转成二分类问题
 
 ### 1.审计者的最优攻击
 
