@@ -1,5 +1,5 @@
 # ADVERSARIAL MACHINE UNLEARNING
-模型删数据后，到底删干净没有。
+模型遗忘数据后，到底遗忘干净没有。
 - Unlearner 先改模型，Auditor 再用最强的 membership inference 去查；unlearner 的目标就是既保住 retain/test 性能，又让 auditor 查不出来。
 
 **MIA** 
