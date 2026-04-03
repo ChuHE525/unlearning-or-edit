@@ -1,7 +1,4 @@
----
-title: 'Not All Wrong is Bad: Using Adversarial Examples for Unlearning'
 
----
 
 # Not All Wrong is Bad: Using Adversarial Examples for Unlearning
 ## 方法
