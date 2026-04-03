@@ -15,7 +15,7 @@ PGD：沿着让模型更容易出错的梯度方向，把模型从正确预测�
 
 ### 原样本和对抗样本之间的距离
 
-要遗忘的原样本 $(x, y)$ 与AMUN 构造的一个对抗样本 $(x_{adv}, y_{adv})$，之间的2范数距离是$\delta$
+要遗忘的原样本 $(x, y)$ 与AMUN 构造的一个对抗样本 $(x_{adv}, y_{adv})$，之间的2范数距离是 $\delta$
 
 $$
 \|x - x_{adv}\|_2 = \delta
@@ -41,7 +41,7 @@ $$
 \|\theta' - \theta_u\|_2^2 \le \|\theta_o - \theta_u\|_2^2 + \frac{2}{\beta}(L\delta - C)
 $$
 
-- $\beta$常数指smooth 常数，参数变一点，损失函数的变化
+- $\beta$ 常数指smooth 常数，参数变一点，损失函数的变化
   
 - L常数指Lipschitz 常数，模型输入变一点，模型输出的变化，在这里面L越小局部微调更不容易把整体模型搞坏
   
@@ -52,7 +52,7 @@ $$
 C=\ell(f_{\theta_o}(x_{adv}),y)+\ell(f_{\theta'}(x_{adv}),y_{adv})-\ell(f_{\theta_u}(x),y)-\ell(f_{\theta_u}(x_{adv}),y_{adv})
 $$
 
-- $f_{\theta_o}$:参数为$\theta_o$的原始模型，对输入的概率预测
+- $f_{\theta_o}$:参数为 $\theta_o$ 的原始模型，对输入的概率预测
   
 - $\ell$：损失函数，衡量模型错的有多严重
   
@@ -103,7 +103,7 @@ $$
 
 ## 2. 对抗样本定义
 
-使用攻击算法PGD，用于模型F，基于原样本x,最大扰动范围是$\epsilon$,生成的对抗样本就是x+$\delta_x$,$\delta_x$是指加在原样本的一小段扰动
+使用攻击算法PGD，用于模型F，基于原样本x,最大扰动范围是 $\epsilon$ ,生成的对抗样本就是 x+$\delta_x$ , $\delta_x$ 是指加在原样本的一小段扰动
 
 $$
 A_F(x,\epsilon)=x+\delta_x
