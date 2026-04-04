@@ -72,7 +72,8 @@ $$
 C=\ell(f_{\theta_o}(x_{adv}),y)+\ell(f_{\theta'}(x_{adv}),y_{adv})-\ell(f_{\theta_u}(x),y)-\ell(f_{\theta_u}(x_{adv}),y_{adv})
 $$
 
-- $f_{\theta_o}$:参数为 $\theta_o$ 的原始模型，对输入的概率预测
+- $f_{\theta_o}$:参数为 $\theta_o$ 的原始模型
+-  $f_{\theta_o}(x_{adv}$ : 表示原始模型对对抗样本的预测输出
   
 - $\ell$：损失函数，衡量模型错的有多严重
   
