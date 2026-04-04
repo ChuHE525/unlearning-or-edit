@@ -2,7 +2,7 @@
 
 # Not All Wrong is Bad: Using Adversarial Examples for Unlearning
 ## 方法
-这篇文章的任务是让模型忘掉 forget set 的影响，同时尽量接近‘删除 forget set 后重新训练得到的理想模型’。提出的方法叫 AMUN，先为每个 forget sample 利用 PGD 构造一个很接近原样本、但能让模型出错的 adversarial example，再把这些对抗样本加入扩展数据集，对原模型进行微调，从而局部调整决策边界，降低模型对 forget set 的记忆和置信度，同时尽量保持整体性能
+这篇文章的任务是让模型忘掉 forget set 的影响，同时尽量接近‘删除 forget set 后重新训练得到的理想模型’。提出的方法叫 AMUN，先为每个 forget sample 利用 PGD 构造一个很接近原样本、但能让模型出错的 adversarial example，再把这些对抗样本加入扩展数据集，对原模型进行微调，从而局部调整决策边界，降低模型对 forget set 的记忆和置信度，同时尽量保持整体性能；还通过一个参数距离上界公式说明，模型越平滑、对抗样本越接近原样本、综合有利因素越强，AMUN 就越可能接近理想重训练模型。
 
 遗忘后模型效果包含俩方面：1.模型对被遗忘的数据是否还保持着高准确率；2.模型在测试集上的性能有没有被破坏。
 
