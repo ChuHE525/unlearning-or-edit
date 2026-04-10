@@ -41,7 +41,7 @@ $$
 
 ### 定义生成器怎么训练
 #### 训练生成器的损失函数
-目的：生成hard samples：让 unlearner 暴露出关于 Forgetting 的信息，同时让 unlearner 丢掉 Remaining 的知识。
+目的：训练的是 generator，要把 mixed sample 变成 hard sample，让当前 unlearner 更容易：暴露 Forgetting 信息，丢掉 Remaining 知识。
 
 $$
 \mathcal{L}_{\mathrm{gen}}
