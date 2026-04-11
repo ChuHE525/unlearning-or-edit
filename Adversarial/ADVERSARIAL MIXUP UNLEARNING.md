@@ -77,6 +77,7 @@ $$
 - 求和就是 把一个 batch 里所有保留样本对应的损失都累加起来。
 - 对于每一个 Remaining 样本 𝑥𝑗，分子只看当前这个 𝑥𝑗,而分母不是只和某一个 Forgetting 样本比，而是和整个 Forgetting batch 比,这样做的作用是：
 对每一个 Remaining 样本，都去检查 mixed sample 是否已经不像它；同时再看 mixed sample 是否整体上还偏向 Forgetting 一侧。
+forgetting 看整体残留所以拿一批来做参照，remaining关注每个样本是否被误伤，所以按照每个单独对比更细。
 #### 目标分布 𝑝(𝑥)
 
 $$
