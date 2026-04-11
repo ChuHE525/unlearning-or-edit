@@ -9,9 +9,7 @@ title: ADVERSARIAL MIXUP UNLEARNING
 - **任务**：克服灾难性遗忘（模型在遗忘目标信息时，把remaining data中本该保留的知识也一起破坏掉了，不能像之前那样正确识别这些样本），从一个已经训练好的模型里，删除 Forgetting data 对应的知识,同时保留 Remaining data 对应的知识。
 - **方法**：提出了 MixUnlearn方法。它先从 Forgetting 和 Remaining 中各取一个样本，在特征层通过 MixBlock 构造 mixed sample；然后用 generator loss 训练一个对抗生成器，故意生成最容易让 unlearner 出错的 hard mixed samples；最后再用对比损失函数对 unlearner 进行训练，让它在 mixed samples 和真实样本上都做到远离 Forgetting、接近 Remaining，从而减轻 catastrophic unlearning。
 ## *公式*
-- 第一步：构造 mixed sample
-- 第二步：训练 generator 去故意制造更难的 mixed samples
-- 第三步：训练 unlearner 去纠正这些 hardest cases
+
 ### 定义混合样本怎么来
 #### 从定义上说明“困难混合样本”是怎么构造的
 
