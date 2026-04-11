@@ -71,7 +71,10 @@ $$
   - SimLoss 大：说明输出远离 Forgetting
 - 分子负责让 mixed sample 输出远离 Remaining；
 分母负责让 mixed sample 输出接近 Forgetting；
-加上前面的负号后，generator 就会专门生成一种样本，使 unlearner 保不住 Remaining、又露出 Forgetting。
+加上前面的负号后，generator 就会专门生成一种样本，使 unlearner 保不住 Remaining、又露出 Forgetting，用对比的形式，这个 mixed sample 输出，是更偏向 Remaining，还是更偏向 Forgetting；一个对比比值用来比较 mixed sample 输出和：
+
+当前 Remaining 样本目标分布的关系
+整体 Forgetting 样本目标分布的关系
 - 这个负号让整个优化方向变成对抗式的，也就是故意让 generator 生成让 unlearner 更容易出错的样本。
 - 求和就是 把一个 batch 里所有保留样本对应的损失都累加起来。
 #### 目标分布 𝑝(𝑥)
