@@ -11,8 +11,7 @@
 对于 unlearned model $\theta_u$，构造审计数据集： 
 
 $$
-\tilde{D}_{\theta_u}=
-\bigl\{
+\tilde{D}_{\theta_u}=\bigl\{
 (s_j^{f}, 1),\,
 (s_j^{te}, 0)
 \bigr\}_{j=1}^{q}
