@@ -11,8 +11,7 @@
 
 
 $$
-\tilde{D}_{\theta_u}
-=
+\tilde{D}_{\theta_u}=
 \bigl\{
 (s_j^{f}, 1),\,
 (s_j^{te}, 0)
