@@ -10,7 +10,8 @@
 - 把 forget 样本和 test 样本经过 unlearned model 后的输出拿出来，分别标成 1 和 0，训练 auditor 判断这些输出来自 forget 还是 test。
 对于 unlearned model $\theta_u$，构造审计数据集：
 
-$$\tilde{D}_{\theta_u}=
+$$
+\tilde{D}_{\theta_u}=
 \left\{
 \left(s_j^{f}, 1\right),
 \left(s_j^{te}, 0\right)
@@ -40,13 +41,15 @@ $$
 
 Auditor 的效用函数为：
 
-$$U_a(\theta_a,\theta_u)=
+$$
+U_a(\theta_a,\theta_u)=
 M(\widetilde{D}_{val}^{\theta_u};\theta_a)
 $$
 
 其中，Auditor 不是随便选攻击器，而是选择训练集上表现最好的攻击器：
 
-$$\theta_a \in \mathcal{B}_{\theta_u}=
+$$
+\theta_a \in \mathcal{B}_{\theta_u}=
 \mathop{\arg\max}_{\theta_a' \in \mathcal{H}_a}
 M(\widetilde{D}_{tr}^{\theta_u};\theta_a')
 $$
@@ -66,7 +69,8 @@ $$
 ### Unlearner 的目标函数
 - 第一项管模型性能，第二项管遗忘是否干净。
 
-$$C_u(\theta_u,\theta_a)=
+$$
+C_u(\theta_u,\theta_a)=
 L(D_r;\theta_u)
 +
 \alpha M(\widetilde{D}_{val}^{\theta_u};\theta_a)
@@ -128,7 +132,8 @@ $$
 
 ### 对 Unlearner 目标求梯度
 
-$$\frac{\partial C_u}{\partial \theta_u}=
+$$
+\frac{\partial C_u}{\partial \theta_u}=
 \frac{\partial L(D_r;\theta_u)}{\partial \theta_u}
 +
 \frac{\partial M(\widetilde{D}_{val}^{\theta_u};\theta_a)}{\partial \theta_a}
