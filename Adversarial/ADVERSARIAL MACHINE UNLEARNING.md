@@ -10,7 +10,11 @@
 - 把 forget 样本和 test 样本经过 unlearned model 后的输出拿出来，分别标成 1 和 0，训练 auditor 判断这些输出来自 forget 还是 test。
 对于 unlearned model $\theta_u$，构造审计数据集：
 
-- $\tilde{D}_{\theta_u}=\left\{\left(s_j^{f}, 1\right),\left(s_j^{te}, 0\right)\right\}_{j=1}^{q}$
+
+
+
+
+  $\tilde{D}_{\theta_u}=\left\{\left(s_j^{f}, 1\right),\left(s_j^{te}, 0\right)\right\}_{j=1}^{q}$
 
 
 
