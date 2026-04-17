@@ -11,11 +11,12 @@
 
 
 $$\tilde{D}_{\theta_u}=
-\bigl\{
-(s_j^{f}, 1),\,
-(s_j^{te}, 0)
-\bigr\}_{j=1}^{q}
+\left\{
+\left(s_j^{f}, 1\right),
+\left(s_j^{te}, 0\right)
+\right\}_{j=1}^{q}
 $$
+
 
 
 
