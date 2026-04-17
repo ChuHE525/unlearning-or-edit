@@ -10,7 +10,14 @@
 - 把 forget 样本和 test 样本经过 unlearned model 后的输出拿出来，分别标成 1 和 0，训练 auditor 判断这些输出来自 forget 还是 test。
 
 
-$\tilde{D}_{\theta_u}=\bigl\{(s_j^{f}, 1),\,(s_j^{te}, 0)\bigr\}_{j=1}^{q}$
+$$\tilde{D}_{\theta_u}=
+\bigl\{
+(s_j^{f}, 1),\,
+(s_j^{te}, 0)
+\bigr\}_{j=1}^{q}
+$$
+
+
 
 
 
