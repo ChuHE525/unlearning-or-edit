@@ -392,9 +392,7 @@ $$
 
 其中：
 
-$$w_{x,y,k}^{\text{wga}}=
-p(y_k \mid y_{<k},x;\theta)^{\beta}
-$$
+$w_{x,y,k}^{\text{wga}}=p(y_k \mid y_{<k},x;\theta)^{\beta}$
 
 如果加入 retain regularization，可以写成：
 
