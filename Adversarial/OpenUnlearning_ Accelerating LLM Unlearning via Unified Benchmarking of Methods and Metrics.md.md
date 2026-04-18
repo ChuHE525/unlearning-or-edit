@@ -437,12 +437,7 @@ $$
 
 SatImp 的权重定义为：
 
-$$w_{x,y,k}^{\text{satimp}}=p(y_k \mid y_{<k},x;\theta)^{\beta_1}
-\cdot
-\left(
-1-p(y_k \mid y_{<k},x;\theta)
-\right)^{\beta_2}
-$$
+$w_{x,y,k}^{\text{satimp}}=p(y_k \mid y_{<k},x;\theta)^{\beta_1}\cdot\left(1-p(y_k \mid y_{<k},x;\theta)\right)^{\beta_2}$
 
 如果加入 retain regularization，可以写成：
 
@@ -617,19 +612,8 @@ $$
 
 ## 公式 5：PDU 的 forget loss，logit-margin flattening
 
-$$
-L_{\text{fgt}}^{\text{LM}}(\pi_\theta,D_{\text{fgt}})=
-\mathbb{E}_{(x,y)\sim D_{\text{fgt}}}
-\left[
-\frac{1}{|y|}
-\sum_{t=1}^{|y|}
-\left(
-\max_k z_{t,k}-
-\frac{1}{V}
-\sum_{k=1}^{V} z_{t,k}
-\right)^2
-\right]
-$$
+$L_{\text{fgt}}^{\text{LM}}(\pi_\theta,D_{\text{fgt}})=\mathbb{E}_{(x,y)\sim D_{\text{fgt}}}\left[\frac{1}{|y|}\sum_{t=1}^{|y|}\left(\max_k z_{t,k}-\frac{1}{V}\sum_{k=1}^{V} z_{t,k}
+\right)^2\right]$
 
 其中：
 
