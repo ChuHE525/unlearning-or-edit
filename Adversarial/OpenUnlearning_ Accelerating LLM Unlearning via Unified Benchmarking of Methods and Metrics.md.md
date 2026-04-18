@@ -104,6 +104,7 @@ $$
 $$
 \text{HM}(a,b)=\frac{2ab}{a+b}
 $$
+
 ---
 - HM 是 harmonic mean，也就是调和平均数。特点是：只要其中一项很低，最终分数就会被明显拉低。适合用来评价 unlearning metric，因为一个好的 metric 不能偏科。
 
