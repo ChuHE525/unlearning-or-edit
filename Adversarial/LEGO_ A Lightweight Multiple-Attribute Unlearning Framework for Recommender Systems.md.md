@@ -72,7 +72,8 @@ $$
 
 ### 5. 最小化 KL 与最大化对数似然
 
-**公式 (5)：** 最小化 $KL(p(\boldsymbol{x}, \boldsymbol{y}) \| q_\phi(\boldsymbol{x}, \boldsymbol{y}))$ 最后等价于最大化 $\mathbb{E}_{p(\boldsymbol{x},\boldsymbol{y})}[\log q_\phi(\boldsymbol{y}|\boldsymbol{x})]$ ，也就是让预测器  $q_\phi(\boldsymbol{y}|\boldsymbol{x})$ 在真实配对 **$(\boldsymbol{x}, \boldsymbol{y})$** 上预测得越准越好。
+**公式 (5)：** 最小化 $KL(p(\boldsymbol{x}, \boldsymbol{y}) \| q_\phi(\boldsymbol{x}, \boldsymbol{y}))$ 最后等价于最大化 $$
+\mathbb{E}_{p(\boldsymbol{x},\boldsymbol{y})}[\log q_\phi(\boldsymbol{y}|\boldsymbol{x})]$$ ，也就是让预测器  $q_\phi(\boldsymbol{y}|\boldsymbol{x})$ 在真实配对 **$(\boldsymbol{x}, \boldsymbol{y})$** 上预测得越准越好。
 
 $$
 \begin{aligned}
