@@ -2,7 +2,7 @@
 
 ## 方法
 
-- 本文的任务是解决推荐系统中的多属性动态遗忘问题，它先通过 **Embedding Calibration** 对每个敏感属性分别进行互信息最小化，利用 **vCLUB** 估计用户 embedding 与该属性之间的信息泄露，并通过参数空间约束避免 embedding 偏离原始表示太远；然后通过 **Flexible Combination** 学习多个校准 embedding 的线性组合权重，使最终 embedding 同时降低与多个敏感属性的互信息。
+- LEGO 的任务是解决推荐系统中的多敏感属性动态遗忘问题。它首先在 Embedding Calibration 阶段，针对每个敏感属性分别最小化用户 embedding 与该属性之间的互信息，并利用 vCLUB 估计这种信息泄露，同时通过参数空间约束限制 embedding 的改动幅度，以尽量保持推荐性能；随后在 Flexible Combination 阶段，学习多个已校准 embedding 的组合权重，将它们加权融合成一个最终 embedding，使该 embedding 同时降低与多个目标敏感属性之间的互信息。
 
 ---
 
