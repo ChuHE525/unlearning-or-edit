@@ -247,29 +247,52 @@ I(U(\boldsymbol{\alpha}); A_i),
 \end{aligned}
 $$
 
-- $k$ ：需要保护的敏感属性数量。比如要保护年龄、性别、职业，则 $k=3$。
-- $A_i$ ：第 $i$ 个敏感属性。例如：$A_1 = \text{年龄}, A_2 = \text{性别}, A_3 = \text{职业}$ 。
-- $\boldsymbol{U}_i^*$ ：前一步 Embedding Calibration 得到的 embedding。例如：
-  - $\boldsymbol{U}_1^*$ ：已经尽量遗忘年龄的 embedding；
-  - $\boldsymbol{U}_2^*$ ：已经尽量遗忘性别的 embedding；
-  - $\boldsymbol{U}_3^*$ ：已经尽量遗忘职业的 embedding。
-- $\alpha_i$ ：第 $i$ 个 embedding 的组合权重。
-- $\boldsymbol{\alpha}$：所有权重组成的向量：$\boldsymbol{\alpha} = [\alpha_1, \alpha_2, \dots, \alpha_k]$ 。
-- $\boldsymbol{U}(\boldsymbol{\alpha})$ ：最终组合出来的新 embedding，可以理解为加权求和：
-  
+- $k$：需要保护的敏感属性数量。比如要保护年龄、性别、职业，则 $k=3$。
+
+- $A_i$：第 $i$ 个敏感属性。例如：
+
+  $$
+  A_1 = \text{年龄}, \quad A_2 = \text{性别}, \quad A_3 = \text{职业}
+  $$
+
+- $\boldsymbol{U}_i^*$：前一步 **Embedding Calibration** 得到的 embedding。例如：
+
+  - $\boldsymbol{U}_1^*$：已经尽量遗忘年龄的 embedding；
+  - $\boldsymbol{U}_2^*$：已经尽量遗忘性别的 embedding；
+  - $\boldsymbol{U}_3^*$：已经尽量遗忘职业的 embedding。
+
+- $\alpha_i$：第 $i$ 个 embedding 的组合权重。
+
+- $\boldsymbol{\alpha}$：所有权重组成的向量：
+
+  $$
+  \boldsymbol{\alpha}=
+  [\alpha_1, \alpha_2, \dots, \alpha_k]
+  $$
+
+- $\boldsymbol{U}(\boldsymbol{\alpha})$：最终组合出来的新 embedding，可以理解为加权求和：
+
   $$
   \boldsymbol{U}(\boldsymbol{\alpha})=
-  \sum_{i=1}^k
+  \sum_{i=1}^{k}
   \alpha_i \boldsymbol{U}_i^*
   $$
 
-- $I(\boldsymbol{U}(\boldsymbol{\alpha}); A_i)$ ：最终 embedding $\boldsymbol{U}(\boldsymbol{\alpha})$ 和第 $i$ 个敏感属性 $A_i$ 的互信息。
-- $\sum_{i=1}^k I(\boldsymbol{U}(\boldsymbol{\alpha}); A_i)$ ：最终 embedding 和所有敏感属性之间的互信息总和。
-- $\min_{\boldsymbol{\alpha}}$ ：通过调整权重向量 $\boldsymbol{\alpha}$ ，让这个总互信息最小。
-- $\text{s.t.}$ ：subject to，表示满足约束条件。
-- $\alpha_i > 0$ ：每个权重都要大于 0。
-- $\|\boldsymbol{\alpha}\|_1 = 1$：所有权重的 L1 范数（绝对值之和）等于 1；因为约束了权重大于 0，所以展开就是：$\alpha_1 + \alpha_2 + \dots + \alpha_k = 1$ 。
+- $I(\boldsymbol{U}(\boldsymbol{\alpha}); A_i)$：最终 embedding $\boldsymbol{U}(\boldsymbol{\alpha})$ 和第 $i$ 个敏感属性 $A_i$ 的互信息。
 
+- $\sum_{i=1}^{k} I(\boldsymbol{U}(\boldsymbol{\alpha}); A_i)$：最终 embedding 和所有敏感属性之间的互信息总和。
+
+- $\min_{\boldsymbol{\alpha}}$：通过调整权重向量 $\boldsymbol{\alpha}$，让这个总互信息最小。
+
+- $\text{s.t.}$：subject to，表示“满足约束条件”。
+
+- $\alpha_i > 0$：每个权重都要大于 0。
+
+- $\|\boldsymbol{\alpha}\|_1 = 1$：所有权重的 L1 范数（绝对值之和）等于 1；因为约束了权重大于 0，所以展开就是：
+
+  $$
+  \alpha_1 + \alpha_2 + \dots + \alpha_k = 1
+  $$
 ---
 
 ### 公式 (13)
