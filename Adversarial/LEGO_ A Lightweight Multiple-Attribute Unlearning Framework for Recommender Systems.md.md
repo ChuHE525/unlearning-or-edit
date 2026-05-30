@@ -60,7 +60,7 @@ $$
 
 ### 4. vCLUB 作为互信息上界的条件
 
-只要 $q_\phi(\boldsymbol{x}, \boldsymbol{y})$ 更像真实配对的数据分布 $p(\boldsymbol{x}, \boldsymbol{y})$，而不是更像随机乱配的数据分布 $p(\boldsymbol{x})p(\boldsymbol{y})$，那么用 $q_\phi$ 构造出来的 vCLUB 可以被当作互信息 $I(\boldsymbol{x}; \boldsymbol{y})$ 的上界。
+只要 $q_\phi(\boldsymbol{x}, \boldsymbol{y})$ 更像真实配对的数据分布 $p(\boldsymbol{x}, \boldsymbol{y})$，而不是更像随机乱配的数据分布 $p(\boldsymbol{x})p(\boldsymbol{y})$ ，那么用 $q_\phi$ 构造出来的 vCLUB 可以被当作互信息 $I(\boldsymbol{x}; \boldsymbol{y})$ 的上界。
 
 $$
 KL(p(\boldsymbol{x},\boldsymbol{y}) \| q_\phi(\boldsymbol{x},\boldsymbol{y}))
@@ -72,7 +72,7 @@ $$
 
 ### 5. 最小化 KL 与最大化对数似然
 
-**公式 (5)：** 最小化 $KL(p(\boldsymbol{x}, \boldsymbol{y}) \| q_\phi(\boldsymbol{x}, \boldsymbol{y}))$ 最后等价于最大化 $\mathbb{E}_{p(\boldsymbol{x},\boldsymbol{y})}[\log q_\phi(\boldsymbol{y}|\boldsymbol{x})]$，也就是让预测器 **$q_\phi(\boldsymbol{y}|\boldsymbol{x})$** 在真实配对 **$(\boldsymbol{x}, \boldsymbol{y})$** 上预测得越准越好。
+**公式 (5)：** 最小化 $KL(p(\boldsymbol{x}, \boldsymbol{y}) \| q_\phi(\boldsymbol{x}, \boldsymbol{y}))$ 最后等价于最大化 $\mathbb{E}_{p(\boldsymbol{x},\boldsymbol{y})}[\log q_\phi(\boldsymbol{y}|\boldsymbol{x})]$ ，也就是让预测器 **$q_\phi(\boldsymbol{y}|\boldsymbol{x})$** 在真实配对 **$(\boldsymbol{x}, \boldsymbol{y})$** 上预测得越准越好。
 
 $$
 \begin{aligned}
@@ -98,8 +98,7 @@ $$
 **公式 (6)：** 用一个 batch 里的 **$B$** 个真实样本，计算预测器 **$q_\phi(\boldsymbol{y}|\boldsymbol{x})$** 在真实配对 **$(\boldsymbol{x}_i, \boldsymbol{y}_i)$** 上的平均对数概率；训练时要**最大化它**，让 **$q_\phi$** 预测 **$\boldsymbol{y}$** 更准。
 
 $$
-\mathcal{L}(\phi)
-=
+\mathcal{L}(\phi)=
 \frac{1}{B}
 \sum_{i=1}^{B}
 \log q_\phi(\boldsymbol{y}_i|\boldsymbol{x}_i).
