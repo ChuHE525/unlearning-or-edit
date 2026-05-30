@@ -230,7 +230,7 @@ $$
 
 ### 公式 (12)
 
-给多个已经分别遗忘不同属性的 embedding 分配权重，把它们加权组合成一个新 embedding，并让这个新 embedding 和所有敏感属性的互信息都尽可能小。
+给多个已经分别遗忘不同属性的 embedding 分配权重，把它们加权组合成一个新 embedding，并让这个新 embedding 和所有敏感属性的互信息都尽可能小。权重 α 是从平均初始化开始，通过最小化最终 embedding 与所有敏感属性的 vCLUB 互信息来梯度更新，并用 softmax 投影成正数且和为 1 的合法组合权重。
 
 $$
 \begin{aligned}
