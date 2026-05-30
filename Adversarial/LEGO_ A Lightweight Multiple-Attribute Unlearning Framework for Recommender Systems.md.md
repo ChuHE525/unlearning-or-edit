@@ -16,13 +16,7 @@ $$
 I(x;y) = \mathbb{E}_{p(x,y)} \left[ \log \frac{p(x,y)}{p(x)p(y)} \right]
 $$
 
-$$
-\log \frac{p(x,y)}{p(x)p(y)}
-=
-\log \frac{p(y|x)p(x)}{p(x)p(y)}
-=
-\log \frac{p(y|x)}{p(y)}
-=
+$$\log \frac{p(x,y)}{p(x)p(y)}=\log \frac{p(y|x)p(x)}{p(x)p(y)}=\log \frac{p(y|x)}{p(y)}=
 \log p(y|x) - \log p(y)
 $$
 
@@ -83,19 +77,15 @@ $$
 $$
 \begin{aligned}
 &\min_{\phi} KL(p(\boldsymbol{x}, \boldsymbol{y}) \| q_\phi(\boldsymbol{x}, \boldsymbol{y})) \\
-&=
-\min_{\phi}
+&=\min_{\phi}
 \mathbb{E}_{p(\boldsymbol{x}, \boldsymbol{y})}
 \left[
-\log(p(\boldsymbol{y}|\boldsymbol{x})p(\boldsymbol{x}))
--
+\log(p(\boldsymbol{y}|\boldsymbol{x})p(\boldsymbol{x}))-
 \log(q_\phi(\boldsymbol{y}|\boldsymbol{x})p(\boldsymbol{x}))
 \right] \\
-&=
-\min_{\phi}
+&=\min_{\phi}
 \mathbb{E}_{p(\boldsymbol{x}, \boldsymbol{y})}
-[\log p(\boldsymbol{y}|\boldsymbol{x})]
--
+[\log p(\boldsymbol{y}|\boldsymbol{x})]-
 \mathbb{E}_{p(\boldsymbol{x}, \boldsymbol{y})}
 [\log q_\phi(\boldsymbol{y}|\boldsymbol{x})].
 \end{aligned}
@@ -129,13 +119,11 @@ $$
 - 在一个 batch 中，比较每个 $\boldsymbol{x}_i$ 对自己真实标签 $\boldsymbol{y}_i$ 的预测分数，和对所有随机标签 $\boldsymbol{y}_j$ 的平均预测分数；**差值越大**，说明 $\boldsymbol{x}$ 中包含的 $\boldsymbol{y}$ 信息越多。
 
 $$
-\hat{I}_{vCLUB}
-=
+\hat{I}_{vCLUB}=
 \frac{1}{B}
 \sum_{i=1}^{B}
 \left[
-\log q_\phi(y_i|x_i)
--
+\log q_\phi(y_i|x_i)-
 \frac{1}{B}
 \sum_{j=1}^{B}
 \log q_\phi(y_j|x_i)
@@ -151,8 +139,7 @@ $$
 找一个新的用户 embedding $U_t^*$，让它和敏感属性 $A_t$ 的互信息 $I(U_t; A_t)$ 最小，也就是尽量“忘掉”这个属性。
 
 $$
-U_t^*
-=
+U_t^*=
 \arg\min_{U}
 I(U; A_t)
 $$
@@ -164,8 +151,7 @@ $$
 因为真实互信息 $I(U_t; A_t)$ 难算，所以用可计算的 $I_{vCLUB}(U_t; A_t)$ 来近似替代它。
 
 $$
-U_t^*
-=
+U_t^*=
 \arg\min_{U_t}
 I_{vCLUB}(U_t; A_t)
 $$
@@ -213,8 +199,7 @@ U_t =
 \quad \boldsymbol{U}_t,
 & \text{if } \|\boldsymbol{U}_t - \boldsymbol{U}_0\|_2 \le \epsilon,
 \\
-\text{proj}(\boldsymbol{U}_t)
-=
+\text{proj}(\boldsymbol{U}_t)=
 \boldsymbol{U}_0
 +
 \frac{\epsilon}{\|\boldsymbol{U}_t - \boldsymbol{U}_0\|_2}
@@ -264,8 +249,7 @@ $$
 - $\boldsymbol{U}(\boldsymbol{\alpha})$：最终组合出来的新 embedding，可以理解为加权求和：
   
   $$
-  \boldsymbol{U}(\boldsymbol{\alpha})
-  =
+  \boldsymbol{U}(\boldsymbol{\alpha})=
   \sum_{i=1}^k
   \alpha_i \boldsymbol{U}_i^*
   $$
@@ -284,10 +268,8 @@ $$
 用 softmax 把任意权重 $\alpha$ 转换成一组合法权重，使每个权重大于 0，并且所有权重加起来等于 1。
 
 $$
-\text{proj}(\boldsymbol{\alpha})
-=
-\text{softmax}(\boldsymbol{\alpha})
-=
+\text{proj}(\boldsymbol{\alpha})=
+\text{softmax}(\boldsymbol{\alpha})=
 \left[
 \frac{\exp(\alpha_1)}{\sum_{j=1}^{k}\exp(\alpha_j)},
 \dots,
