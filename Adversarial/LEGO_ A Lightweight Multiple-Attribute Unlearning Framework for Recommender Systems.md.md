@@ -252,8 +252,7 @@ $$
 - $A_i$：第 $i$ 个敏感属性。例如：
 
   $$
-  A_1 = \text{年龄}, \quad A_2 = \text{性别}, \quad A_3 = \text{职业}
-  $$
+  A_1 = \text{年龄}, \quad A_2 = \text{性别}, \quad A_3 = \text{职业}$$
 
 - $\boldsymbol{U}_i^*$：前一步 **Embedding Calibration** 得到的 embedding。例如：
 
