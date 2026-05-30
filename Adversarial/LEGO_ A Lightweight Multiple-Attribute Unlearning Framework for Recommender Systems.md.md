@@ -30,6 +30,7 @@ $$
 ### 3.
 
 引入神经网络 $q_\phi$ 替代真实概率 $p$
+
 $$\begin{aligned}
 I_{\text{vCLUB}}(\boldsymbol{x}; \boldsymbol{y}) &= \mathbb{E}_{p(\boldsymbol{x},\boldsymbol{y})} [\log q_\phi(\boldsymbol{y} | \boldsymbol{x})] \\
 &\quad - \mathbb{E}_{p(\boldsymbol{x})}\mathbb{E}_{p(\boldsymbol{y})} [\log q_\phi(\boldsymbol{y} | \boldsymbol{x})].
@@ -37,10 +38,12 @@ I_{\text{vCLUB}}(\boldsymbol{x}; \boldsymbol{y}) &= \mathbb{E}_{p(\boldsymbol{x}
 
 ### 4.
 只要 $q_\phi(\boldsymbol{x}, \boldsymbol{y})$ 更像真实配对的数据分布 $p(\boldsymbol{x}, \boldsymbol{y})$，而不是更像随机乱配的数据分布 $p(\boldsymbol{x})p(\boldsymbol{y})$，那么用 $q_\phi$ 构造出来的 vCLUB  可以被当作互信息 $I(\boldsymbol{x}; \boldsymbol{y})$ 的上界。
+   
     $$KL(p(\boldsymbol{x},\boldsymbol{y}) \| q_\phi(\boldsymbol{x},\boldsymbol{y})) \le KL(p(\boldsymbol{x})p(\boldsymbol{y}) \| q_\phi(\boldsymbol{x},\boldsymbol{y})).$$
 
 * **公式 (5)：** 最小化 $KL(p(\boldsymbol{x}, \boldsymbol{y}) \| q_\phi(\boldsymbol{x}, \boldsymbol{y}))$ 最后等价于最大化 $\mathbb{E}_{p(\boldsymbol{x},\boldsymbol{y})}[\log q_\phi(\boldsymbol{y}|\boldsymbol{x})]$，也就是让预测器 **$q_\phi(\boldsymbol{y}|\boldsymbol{x})$** 在真实配对 **$(\boldsymbol{x}, \boldsymbol{y})$** 上预测得越准越好。
-    $$
+
+   $$
     \begin{aligned}
     &\min_{\phi} KL(p(\boldsymbol{x}, \boldsymbol{y}) \| q_\phi(\boldsymbol{x}, \boldsymbol{y})) \\
     &= \min_{\phi} \mathbb{E}_{p(\boldsymbol{x}, \boldsymbol{y})} \left[ \log(p(\boldsymbol{y}|\boldsymbol{x})p(\boldsymbol{x})) - \log(q_\phi(\boldsymbol{y}|\boldsymbol{x})p(\boldsymbol{x})) \right] \\
@@ -49,32 +52,39 @@ I_{\text{vCLUB}}(\boldsymbol{x}; \boldsymbol{y}) &= \mathbb{E}_{p(\boldsymbol{x}
     $$
 
 * **公式 (6)：** 用一个 batch 里的 **$B$** 个真实样本，计算预测器 **$q_\phi(\boldsymbol{y}|\boldsymbol{x})$** 在真实配对 **$(\boldsymbol{x}_i, \boldsymbol{y}_i)$** 上的平均对数概率；训练时要**最大化它**，让 **$q_\phi$** 预测 **$\boldsymbol{y}$** 更准。
-    $$\mathcal{L}(\phi) = \frac{1}{B}\sum_{i=1}^{B}\log q_\phi(\boldsymbol{y}_i|\boldsymbol{x}_i).$$
+
+   $$\mathcal{L}(\phi) = \frac{1}{B}\sum_{i=1}^{B}\log q_\phi(\boldsymbol{y}_i|\boldsymbol{x}_i).$$
+  
 - $\mathcal{L}(\phi)$：代表对数似然函数（Log-Likelihood Function）越大，说明预测器给真实标签的概率越高，预测越准。
 - $B$：代表 Batch Size，一次训练中使用的样本数量
 - $\frac{1}{B}\sum_{i=1}^{B}$：代表求平均值。把这一个 Batch 里所有 $B$ 个样本的得分加起来，然后除以 $B$ 算个平均分。
 - $\log q_\phi(\boldsymbol{y}_i|\boldsymbol{x}_i)$：对于第 $i$ 个样本，神经网络在看了特征 $\boldsymbol{x}_i$ 后，准确预测出它真实的标签 $\boldsymbol{y}_i$ 的对数概率。
 * **公式 (7)：** 批次（Batch）内 真实标签的 log 分数 − 所有标签的平均 log 分数。
 - 在一个 batch 中，比较每个 $\boldsymbol{x}_i$ 对自己真实标签 $\boldsymbol{y}_i$ 的预测分数，和对所有随机标签 $\boldsymbol{y}_j$ 的平均预测分数；**差值越大**，说明 $\boldsymbol{x}$ 中包含的 $\boldsymbol{y}$ 信息越多。
-    $$\hat{I}_{vCLUB} = \frac{1}{B} \sum_{i=1}^{B} \left[ \log q_\phi(y_i|x_i) - \frac{1}{B} \sum_{j=1}^{B} \log q_\phi(y_j|x_i) \right]$$
+
+   $$\hat{I}_{vCLUB} = \frac{1}{B} \sum_{i=1}^{B} \left[ \log q_\phi(y_i|x_i) - \frac{1}{B} \sum_{j=1}^{B} \log q_\phi(y_j|x_i) \right]$$
 
 
 
 ### 步骤一：嵌入校准 (Embedding Calibration)
 
 * **公式 (8)：** 找一个新的用户 embedding $U_t^*$，让它和敏感属性 $A_t$ 的互信息 $I(U_t; A_t)$ 最小，也就是尽量“忘掉”这个属性。
-    $$U_t^* = \arg\min_{U} I(U; A_t)$$
+
+   $$U_t^* = \arg\min_{U} I(U; A_t)$$
 
 * **公式 (9)：** 因为真实互信息 $I(U_t; A_t)$ 难算，所以用可计算的 $I_{vCLUB}(U_t; A_t)$ 来近似替代它。
-    $$U_t^* = \arg\min_{U_t} I_{vCLUB}(U_t; A_t)$$
+
+   $$U_t^* = \arg\min_{U_t} I_{vCLUB}(U_t; A_t)$$
 
 * **公式 (10)：** 攻防交替优化，也就是：先训练预测器 $q_\phi$，让它尽量从用户 embedding $\boldsymbol{U}_t$ 中预测出敏感属性 $\boldsymbol{A}_t$；再反过来更新 embedding $\boldsymbol{U}_t$，让 vCLUB 估计出的互信息尽量小。
-   $$
+
+    $$
 \begin{aligned}
 \phi &= \arg \max_{\phi} \mathbb{E}_{p(\boldsymbol{U}_t, \boldsymbol{A}_t)} \mathcal{L}(\phi), \\
 \boldsymbol{U}_t^* &= \arg \min_{\boldsymbol{U}_t} \mathbb{E}_{p(\boldsymbol{U}_t, \boldsymbol{A}_t)} \hat{I}_{\text{vCLUB}}.
 \end{aligned}
 $$
+
 - $\phi$ ： 预测器的参数。
 - $\arg\max_{\phi}$： 寻找一组最优的参数 $\phi$，使得后面的那个函数（得分）达到最大值。
 - $\mathbb{E}_{p(\boldsymbol{U}_t, \boldsymbol{A}_t)}$： 从真实的用户特征 - 敏感属性配对数据集中抽取样本算期望（求平均）。
@@ -84,12 +94,13 @@ $$
 - $\arg\min_{\boldsymbol{U}_t}$： 保持预测器不变，反向传播去更新特征向量 $\boldsymbol{U}_t$ 的数值，使得后面的那个函数达到最小值。
 -  $\hat{I}_{\text{vCLUB}}$：用 batch 估计出来的 vCLUB 互信息上界。
 * **公式 (11)：** 更新后的 embedding 如果离原始 embedding $U_0$ 太远，就把它拉回半径为 $\epsilon$ 的范围内，防止推荐性能下降。
+
     $$
 U_t = \begin{cases} 
 \quad \boldsymbol{U}_t, & \text{if } \|\boldsymbol{U}_t - \boldsymbol{U}_0\|_2 \le \epsilon, \\ 
 \text{proj}(\boldsymbol{U}_t) = \boldsymbol{U}_0 + \frac{\epsilon}{\|\boldsymbol{U}_t - \boldsymbol{U}_0\|_2}(\boldsymbol{U}_t - \boldsymbol{U}_0), & \text{otherwise.} 
-\end{cases}
-$$
+\end{cases}$$
+
 * $\boldsymbol{U}_0$：原始用户 embedding，也就是还没做遗忘之前的用户向量。
 * $\boldsymbol{U}_t$：更新后的用户 embedding，正在为了遗忘第 $t$ 个敏感属性而被修改。
 * $\boldsymbol{U}_t - \boldsymbol{U}_0$：新 embedding 和原始 embedding 的差值。
@@ -101,12 +112,13 @@ $$
 ### 步骤二：灵活组合 (Flexible Combination)
 
 * **公式 (12)：** 给多个已经分别遗忘不同属性的 embedding 分配权重，把它们加权组合成一个新 embedding，并让这个新 embedding 和所有敏感属性的互信息都尽可能小。
+
   $$
 \begin{aligned}
 &\min_{\boldsymbol{\alpha}} \sum_{i=1}^{k} I(U(\boldsymbol{\alpha}); A_i), \\
 &\text{s.t.} \quad \alpha_i > 0, \, i = 1, \dots, k, \quad \|\boldsymbol{\alpha}\|_1 = 1.
-\end{aligned}
-$$
+\end{aligned}$$
+
 * $k$：需要保护的敏感属性数量。比如要保护年龄、性别、职业，则 $k=3$。
 * $A_i$：第 $i$ 个敏感属性。例如：$A_1 = \text{年龄}, A_2 = \text{性别}, A_3 = \text{职业}$。
 * $\boldsymbol{U}_i^*$：前一步 Embedding Calibration 得到的 embedding。例如：
@@ -123,9 +135,11 @@ $$
 * $\alpha_i > 0$：每个权重都要大于 0。
 * $\|\boldsymbol{\alpha}\|_1 = 1$：所有权重的 L1 范数（绝对值之和）等于 1；因为约束了权重大于 0，所以展开就是：$\alpha_1 + \alpha_2 + \dots + \alpha_k = 1$。
 * **公式 (13)：** 用 softmax 把任意权重 α 转换成一组合法权重，使每个权重大于 0，并且所有权重加起来等于 1。
-  $$
+
+   $$
 \text{proj}(\boldsymbol{\alpha}) = \text{softmax}(\boldsymbol{\alpha}) = \left[ \frac{\exp(\alpha_1)}{\sum_{j=1}^k \exp(\alpha_j)}, \dots, \frac{\exp(\alpha_k)}{\sum_{j=1}^k \exp(\alpha_j)} \right].
 $$
+
 * $\text{proj}(\boldsymbol{\alpha})$：投影操作，把不合法的权重强行变成合法权重。
 * $\text{softmax}(\boldsymbol{\alpha})$：softmax 函数，用来把一组任意的实数转换成一组加起来等于 1 的正数权重。
 * $\exp(\alpha_i)$：对 $\alpha_i$ 取指数运算，它的作用是保证输出的结果一定大于 0（无论原始 $\alpha_i$ 是正是负）。
