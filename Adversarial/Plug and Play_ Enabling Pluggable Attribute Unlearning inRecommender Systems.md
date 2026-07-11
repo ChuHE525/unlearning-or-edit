@@ -42,12 +42,12 @@ $$
 $$
 R^{c}(\mathbf{Z}, \epsilon \mid \Pi)=
 \sum_{j=1}^{k}
-\frac{\operatorname{tr}(\Pi_j)}{2m}
+\frac{\mathrm{tr}(\Pi_j)}{2m}
 \log\det
 \left(
 \mathbf{I}+
 \frac{d}
-{\operatorname{tr}(\Pi_j)\epsilon^2}
+{\mathrm{tr}(\Pi_j)\epsilon^2}
 \mathbf{Z}\Pi_j\mathbf{Z}^{\top}
 \right)
 $$
@@ -109,13 +109,13 @@ $$
 $$
 \nabla_{\Pi_j}
 R^c(\hat{\mathbf{U}},\epsilon \mid \Pi)=
-\frac{\operatorname{tr}(\Pi_j)}{2m}
+\frac{\mathrm{tr}(\Pi_j)}{2m}
 \hat{\mathbf{U}}^{\top}
 \left(
 \mathbf{I}
 +
 \frac{d}
-{\operatorname{tr}(\Pi_j)\epsilon^2}
+{\mathrm{tr}(\Pi_j)\epsilon^2}
 \hat{\mathbf{U}}\Pi_j\hat{\mathbf{U}}^{\top}
 \right)^{-1}
 \hat{\mathbf{U}}
@@ -145,11 +145,12 @@ $$
 R^c(\hat{\mathbf{U}},\epsilon \mid \Pi)=
 \sum_{j=1}^{k}
 A\Pi_j\hat{\mathbf{U}}
-\operatorname{tr}(\Pi_j)
+\mathrm{tr}(\Pi_j)
 \left(
-\mathbf{I}+
+\mathbf{I}
++
 \frac{d}
-{\operatorname{tr}(\Pi_j)\epsilon^2}
+{\mathrm{tr}(\Pi_j)\epsilon^2}
 \hat{\mathbf{U}}
 \Pi_j
 \hat{\mathbf{U}}^{\top}
