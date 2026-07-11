@@ -21,7 +21,8 @@ $$L(\mathbf{Z}, \epsilon)=
 \tag{1}
 $$
 1.Z是指
-- 限制向量大小，并保证类别分配有效 $$
+- 限制向量大小，并保证类别分配有效
+  $$
 \begin{aligned}
 \max_{\hat{\mathbf{U}}, \Pi}
 \quad &
@@ -36,10 +37,12 @@ R(\hat{\mathbf{U}}, \epsilon)
 \Pi \in \Omega.
 \end{aligned}\tag{5}
 $$
-- 计算每个样本平均需要的编码量，表示每个用户嵌入是集中还是分散$$
+- 计算每个样本平均需要的编码量，表示每个用户嵌入是集中还是分散
+  $$
 R(\mathbf{Z},\epsilon)=\frac{1}{2}\log\det\left(\mathbf{I}+\frac{d}{m\epsilon^2}\mathbf{Z}\mathbf{Z}^{\top}\right)\tag{2}
 $$
-- 把用户按照隐私属性分类，再分别计算每个类别内部的编码率$$
+- 把用户按照隐私属性分类，再分别计算每个类别内部的编码率
+  $$
 R^{c}(\mathbf{Z}, \epsilon \mid \Pi)=
 \sum_{j=1}^{k}
 \frac{\operatorname{tr}(\Pi_j)}{2m}
@@ -50,14 +53,16 @@ R^{c}(\mathbf{Z}, \epsilon \mid \Pi)=
 \mathbf{Z}\Pi_j\mathbf{Z}^{\top}
 \right)\tag{3}
 $$
-- 破坏同一属性类别的共同规律，同时让不同的属性类别相互堆叠$$
+- 破坏同一属性类别的共同规律，同时让不同的属性类别相互堆叠
+  $$
 \max_{\hat{\mathbf{U}}, \Pi}
 J(\hat{\mathbf{U}}, \Pi)=
 R^c(\hat{\mathbf{U}}, \epsilon \mid \Pi)-
 R(\hat{\mathbf{U}}, \epsilon)\tag{4}
 $$
 
-- 删除敏感属性，同时避免推荐信息过度删除$$
+- 删除敏感属性，同时避免推荐信息过度删除
+  $$
 \begin{aligned}
 \max_{\hat{\mathbf{U}}, \Pi}
 \quad &
@@ -75,7 +80,8 @@ R(\hat{\mathbf{U}}, \epsilon)-b
 \Pi \in \Omega.
 \end{aligned}\tag{6}
 $$
-- 计算类别分配矩阵该往哪个方向更新$$
+- 计算类别分配矩阵该往哪个方向更新
+  $$
 \nabla_{\Pi_j}
 R^c(\hat{\mathbf{U}},\epsilon \mid \Pi)=
 \frac{\operatorname{tr}(\Pi_j)}{2m}
@@ -87,7 +93,8 @@ R^c(\hat{\mathbf{U}},\epsilon \mid \Pi)=
 \right)^{-1}
 \hat{\mathbf{U}}\tag{7}
 $$
-- 计算总体编码率R对用户嵌入的梯度$$
+- 计算总体编码率R对用户嵌入的梯度
+  $$
 \nabla_{\hat{\mathbf{U}}}
 R(\hat{\mathbf{U}},\epsilon)=
 A\hat{\mathbf{U}}
@@ -97,7 +104,8 @@ A\hat{\mathbf{U}}
 A\hat{\mathbf{U}}
 \right)^{-1}\tag{8}
 $$
--计算类别编码率 $R^c$ 对用户嵌入的梯度 $$
+-计算类别编码率 $R^c$ 对用户嵌入的梯度
+$$
 \nabla_{\hat{\mathbf{U}}}
 R^c(\hat{\mathbf{U}},\epsilon \mid \Pi)=
 \sum_{j=1}^{k}
