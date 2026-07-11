@@ -10,10 +10,9 @@
 
 计算全部嵌入向量包含的信息量，用编码长度衡量嵌入分布是集中还是分散。
 
-$$
-L(\mathbf{Z}, \epsilon)=
+$$L(\mathbf{Z}, \epsilon)=
 \frac{m+d}{2}
-\log\det
+\log \det
 \left(
 \mathbf{I}+
 \frac{d}{m\epsilon^2}
@@ -59,8 +58,7 @@ $$
 
 $$
 J(\hat{\mathbf{U}}, \Pi)=
-R^c(\hat{\mathbf{U}}, \epsilon \mid \Pi)
--
+R^c(\hat{\mathbf{U}}, \epsilon \mid \Pi)-
 R(\hat{\mathbf{U}}, \epsilon)
 $$
 
@@ -90,8 +88,7 @@ $$
 \begin{aligned}
 \max_{\hat{\mathbf{U}}, \Pi}
 \quad &
-R^c(\hat{\mathbf{U}}, \epsilon \mid \Pi)
--
+R^c(\hat{\mathbf{U}}, \epsilon \mid \Pi)-
 \lambda
 \left|
 R(\hat{\mathbf{U}}, \epsilon)-b
@@ -111,8 +108,7 @@ $$
 
 $$
 \nabla_{\Pi_j}
-R^c(\hat{\mathbf{U}},\epsilon \mid \Pi)
-=
+R^c(\hat{\mathbf{U}},\epsilon \mid \Pi)=
 \frac{\operatorname{tr}(\Pi_j)}{2m}
 \hat{\mathbf{U}}^{\top}
 \left(
@@ -131,12 +127,10 @@ $$
 
 $$
 \nabla_{\hat{\mathbf{U}}}
-R(\hat{\mathbf{U}},\epsilon)
-=
+R(\hat{\mathbf{U}},\epsilon)=
 A\hat{\mathbf{U}}
 \left(
-\mathbf{I}
-+
+\mathbf{I}+
 \hat{\mathbf{U}}^{\top}
 A\hat{\mathbf{U}}
 \right)^{-1}
@@ -148,14 +142,12 @@ $$
 
 $$
 \nabla_{\hat{\mathbf{U}}}
-R^c(\hat{\mathbf{U}},\epsilon \mid \Pi)
-=
+R^c(\hat{\mathbf{U}},\epsilon \mid \Pi)=
 \sum_{j=1}^{k}
 A\Pi_j\hat{\mathbf{U}}
 \operatorname{tr}(\Pi_j)
 \left(
-\mathbf{I}
-+
+\mathbf{I}+
 \frac{d}
 {\operatorname{tr}(\Pi_j)\epsilon^2}
 \hat{\mathbf{U}}
